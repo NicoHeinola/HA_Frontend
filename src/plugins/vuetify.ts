@@ -46,26 +46,31 @@ export default createVuetify({
       variant: "outlined",
       color: "secondary",
       density: "compact",
+      hideDetails: "auto",
     },
     VTextField: {
       variant: "outlined",
       color: "secondary",
       density: "compact",
+      hideDetails: "auto",
     },
     VSelect: {
       variant: "outlined",
       color: "secondary",
       density: "compact",
+      hideDetails: "auto",
     },
     VFileInput: {
       variant: "outlined",
       color: "secondary",
       density: "compact",
+      hideDetails: "auto",
     },
     VAutocomplete: {
       variant: "outlined",
       color: "secondary",
       density: "compact",
+      hideDetails: "auto",
     },
   },
 });
