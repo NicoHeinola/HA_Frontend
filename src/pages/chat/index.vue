@@ -8,7 +8,7 @@
         <p class="text-center text-medium-emphasis text-subtitle-2">I'm your AI assistant. How can I help you today?</p>
       </v-col>
       <v-col cols="12" class="d-flex align-center justify-center">
-        <v-text-field density="comfortable" style="max-width: 600px" label="How can I help?"></v-text-field>
+        <v-textarea density="comfortable" style="max-width: 600px" label="Type your message here..."></v-textarea>
       </v-col>
     </v-row>
   </div>
