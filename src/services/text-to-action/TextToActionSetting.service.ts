@@ -1,6 +1,6 @@
-import api from "./api";
+import api from "../api";
 
-export const SettingService = () => {
+export const TextToActionSettingService = () => {
   const getSettings = async (params?: any) => {
     const response = await api.get("/settings", { params });
     return response.data;
