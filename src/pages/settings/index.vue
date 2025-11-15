@@ -75,9 +75,9 @@ watch(dialogOpen, (val) => {
       <v-col class="d-flex align-center justify-space-between">
         <h1 class="text-h4">TTA Settings</h1>
         <div class="d-flex align-center ga-2">
-          <v-btn color="error" prepend-icon="mdi-seed" @click="seedTextToActionSettings" :loading="!!seeding"
-            >Seed TTA Settings</v-btn
-          >
+          <v-btn color="error" prepend-icon="mdi-seed" @click="seedTextToActionSettings" :loading="!!seeding">
+            Seed TTA Settings
+          </v-btn>
         </div>
       </v-col>
     </v-row>
