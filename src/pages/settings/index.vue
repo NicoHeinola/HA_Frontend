@@ -1,12 +1,10 @@
 <script lang="ts" setup>
-import { ref, onMounted, watch } from "vue";
+import { ref, onMounted } from "vue";
 import type TextToActionSetting from "@/models/text-to-action/TextToActionSetting";
-import { TextToActionSettingType } from "@/models/text-to-action/TextToActionSetting";
 import { TextToActionSettingService } from "@/services/text-to-action/TextToActionSetting.service";
 import { useSnackbar } from "@/components/use-snackbar/useSnackbar";
 import { useErrorSnackbar } from "@/utils/errorSnackbar";
 import { useConfirm } from "@/components/use-dialog/confirm/useConfirm";
-import TextLabel from "@/components/text-label/TextLabel.vue";
 
 const textToActionSettings = ref<TextToActionSetting[]>([]);
 const isLoading = ref(false);
