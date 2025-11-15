@@ -10,16 +10,9 @@ import TextLabel from "@/components/text-label/TextLabel.vue";
 
 const textToActionSettings = ref<TextToActionSetting[]>([]);
 const isLoading = ref(false);
-const isSeeding = ref<Boolean>(false);
+const isSeeding = ref(false);
 const openSnackbar = useSnackbar();
 const { errorSnackbar } = useErrorSnackbar();
-
-const newTextToActionSetting = ref<TextToActionSetting>({
-  key: "",
-  value: "",
-  type: TextToActionSettingType.String,
-});
-
 const openConfirm = useConfirm();
 
 const getTextToActionSettings = async () => {
@@ -56,20 +49,6 @@ const seedTextToActionSettings = async () => {
   isSeeding.value = false;
 };
 
-const findSettingByKey = (settings: any[], key: string) => {
-  return settings.find((s) => s.key === key);
-};
-
-const updateSettingValue = async (settings: any[], key: string, value: string) => {
-  const setting = settings.find((s) => s.key === key);
-
-  if (!setting) {
-    return;
-  }
-
-  setting.value = value;
-};
-
 onMounted(getTextToActionSettings);
 </script>
 
@@ -85,38 +64,6 @@ onMounted(getTextToActionSettings);
         </div>
       </v-col>
     </v-row>
-    <v-row>
-      <v-col cols="12" class="d-flex align-center justify-space-between">
-        <h2>General</h2>
-      </v-col>
-    </v-row>
-    <v-row>
-      <v-col cols="12" class="pb-0">
-        <text-label class="text-grey d-flex ga-1">
-          <span> Existing keywords: </span>
-          <span class="text-secondary">
-            {actions}
-            <v-tooltip
-              activator="parent"
-              text="Actions will be replaced with the actual JSON list of actions"
-            ></v-tooltip>
-          </span>
-        </text-label>
-      </v-col>
-      <v-col cols="12">
-        <v-textarea
-          :model-value="findSettingByKey(textToActionSettings, 'system_prompt')?.value"
-          @update:model-value="(update) => updateSettingValue(textToActionSettings, 'system_prompt', update)"
-          :loading="!!isLoading || !!isSeeding"
-          label="System prompt"
-          rows="25"
-        ></v-textarea>
-      </v-col>
-    </v-row>
-    <v-row>
-      <v-col class="d-flex align-center justify-space-between">
-        <h2>Actions</h2>
-      </v-col>
-    </v-row>
+    <TextToActionSettingsForm v-model:settings="textToActionSettings" :isLoading="isSeeding || isLoading" />
   </v-container>
 </template>
