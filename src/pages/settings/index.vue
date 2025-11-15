@@ -76,13 +76,18 @@ onMounted(getTextToActionSettings);
 <template>
   <v-container class="pa-12">
     <v-row>
-      <v-col class="d-flex align-center justify-space-between">
+      <v-col cols="12" class="d-flex align-center justify-space-between">
         <h1>TTA Settings</h1>
         <div class="d-flex align-center ga-2">
           <v-btn color="error" prepend-icon="mdi-seed" @click="seedTextToActionSettings" :isLoading="!!isSeeding">
             Seed TTA Settings
           </v-btn>
         </div>
+      </v-col>
+    </v-row>
+    <v-row>
+      <v-col cols="12" class="d-flex align-center justify-space-between">
+        <h2>General</h2>
       </v-col>
     </v-row>
     <v-row>
@@ -106,6 +111,11 @@ onMounted(getTextToActionSettings);
           label="System prompt"
           rows="25"
         ></v-textarea>
+      </v-col>
+    </v-row>
+    <v-row>
+      <v-col class="d-flex align-center justify-space-between">
+        <h2>Actions</h2>
       </v-col>
     </v-row>
   </v-container>
