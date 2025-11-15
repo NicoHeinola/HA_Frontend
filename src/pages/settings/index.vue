@@ -64,6 +64,6 @@ onMounted(getTextToActionSettings);
         </div>
       </v-col>
     </v-row>
-    <TextToActionSettingsForm v-model:settings="textToActionSettings" :isLoading="isSeeding || isLoading" />
+    <text-to-action-settings-form v-model:settings="textToActionSettings" :isLoading="isSeeding || isLoading" />
   </v-container>
 </template>
