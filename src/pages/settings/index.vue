@@ -6,9 +6,11 @@ import { TextToActionSettingService } from "@/services/text-to-action/TextToActi
 import { useSnackbar } from "@/components/use-snackbar/useSnackbar";
 import { useErrorSnackbar } from "@/utils/errorSnackbar";
 import { useConfirm } from "@/components/use-dialog/confirm/useConfirm";
+import TextLabel from "@/components/text-label/TextLabel.vue";
 
-const texttoactionsettings = ref<TextToActionSetting[]>([]);
-const loading = ref(false);
+const textToActionSettings = ref<TextToActionSetting[]>([]);
+const isLoading = ref(false);
+const isSeeding = ref<Boolean>(false);
 const openSnackbar = useSnackbar();
 const { errorSnackbar } = useErrorSnackbar();
 
@@ -18,25 +20,17 @@ const newTextToActionSetting = ref<TextToActionSetting>({
   type: TextToActionSettingType.String,
 });
 
-const dialogOpen = ref(false);
-
 const openConfirm = useConfirm();
 
-const seeding = ref<Boolean>(false);
-
 const getTextToActionSettings = async () => {
-  loading.value = true;
+  isLoading.value = true;
   try {
-    texttoactionsettings.value = await TextToActionSettingService().getSettings();
+    textToActionSettings.value = await TextToActionSettingService().getSettings();
   } catch (error) {
     errorSnackbar(error, openSnackbar);
-    texttoactionsettings.value = [];
+    textToActionSettings.value = [];
   }
-  loading.value = false;
-};
-
-const resetNewTextToActionSetting = () => {
-  newTextToActionSetting.value = { key: "", value: "", type: TextToActionSettingType.String };
+  isLoading.value = false;
 };
 
 const seedTextToActionSettings = async () => {
@@ -49,7 +43,7 @@ const seedTextToActionSettings = async () => {
 
   if (!ok) return;
 
-  seeding.value = true;
+  isSeeding.value = true;
 
   try {
     await TextToActionSettingService().seedSettings({ replace: true });
@@ -59,14 +53,24 @@ const seedTextToActionSettings = async () => {
     errorSnackbar(error, openSnackbar);
   }
 
-  seeding.value = false;
+  isSeeding.value = false;
+};
+
+const findSettingByKey = (settings: any[], key: string) => {
+  return settings.find((s) => s.key === key);
+};
+
+const updateSettingValue = async (settings: any[], key: string, value: string) => {
+  const setting = settings.find((s) => s.key === key);
+
+  if (!setting) {
+    return;
+  }
+
+  setting.value = value;
 };
 
 onMounted(getTextToActionSettings);
-
-watch(dialogOpen, (val) => {
-  if (!val) resetNewTextToActionSetting();
-});
 </script>
 
 <template>
@@ -75,14 +79,34 @@ watch(dialogOpen, (val) => {
       <v-col class="d-flex align-center justify-space-between">
         <h1>TTA Settings</h1>
         <div class="d-flex align-center ga-2">
-          <v-btn color="error" prepend-icon="mdi-seed" @click="seedTextToActionSettings" :loading="!!seeding">
+          <v-btn color="error" prepend-icon="mdi-seed" @click="seedTextToActionSettings" :isLoading="!!isSeeding">
             Seed TTA Settings
           </v-btn>
         </div>
       </v-col>
     </v-row>
     <v-row>
-      <v-col cols="12"> </v-col>
+      <v-col cols="12" class="pb-0">
+        <text-label class="text-grey d-flex ga-1">
+          <span> Existing keywords: </span>
+          <span class="text-secondary">
+            {actions}
+            <v-tooltip
+              activator="parent"
+              text="Actions will be replaced with the actual JSON list of actions"
+            ></v-tooltip>
+          </span>
+        </text-label>
+      </v-col>
+      <v-col cols="12">
+        <v-textarea
+          :model-value="findSettingByKey(textToActionSettings, 'system_prompt')?.value"
+          @update:model-value="(update) => updateSettingValue(textToActionSettings, 'system_prompt', update)"
+          :loading="!!isLoading || !!isSeeding"
+          label="System prompt"
+          rows="25"
+        ></v-textarea>
+      </v-col>
     </v-row>
   </v-container>
 </template>

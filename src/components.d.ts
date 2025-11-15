@@ -19,5 +19,6 @@ declare module 'vue' {
     RouterLink: typeof import('vue-router')['RouterLink']
     RouterView: typeof import('vue-router')['RouterView']
     SnackbarProvider: typeof import('./components/use-snackbar/SnackbarProvider.vue')['default']
+    TextLabel: typeof import('./components/text-label/TextLabel.vue')['default']
   }
 }
