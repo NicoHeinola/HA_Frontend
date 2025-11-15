@@ -18,8 +18,10 @@ declare module 'vue' {
     NavigationBar: typeof import('./components/navigation/NavigationBar.vue')['default']
     RouterLink: typeof import('vue-router')['RouterLink']
     RouterView: typeof import('vue-router')['RouterView']
+    SettingsForm: typeof import('./components/text-to-action/action-form/TextToActionSettingsForm.vue')['default']
     SnackbarProvider: typeof import('./components/use-snackbar/SnackbarProvider.vue')['default']
     TextLabel: typeof import('./components/text-label/TextLabel.vue')['default']
-    TextToActionSettingsForm: typeof import('./components/text-to-action/action-form/TextToActionSettingsForm.vueingsForm.vue')['default']
+    TextToActionActionsCard: typeof import('./components/text-to-action/action-card/TextToActionActionsCard.vue')['default']
+    TextToActionSettingsForm: typeof import('./components/text-to-action/action-form/TextToActionSettingsForm.vue')['default']
   }
 }
