@@ -13,6 +13,8 @@ const aiResponse = ref<Record<string, any> | null>(null);
 const isSendingMessage = ref(false);
 const isLoadingModels = ref(false);
 
+const isPlaybackEnabled = ref(false);
+
 const isLoading = computed(() => {
   return isSendingMessage.value || isLoadingModels.value;
 });
@@ -78,6 +80,10 @@ const onEnter = async (event: KeyboardEvent) => {
     if (response && Object.keys(response).length > 0) {
       chatMessage.value = "";
     }
+
+    await nextTick();
+
+    playbackAIAnswer();
   } catch (error) {
     aiResponse.value = {};
     errorSnackbar(error, openSnackbar);
@@ -87,17 +93,21 @@ const onEnter = async (event: KeyboardEvent) => {
   }
 };
 
-const onPressRunAction = async () => {
+const playbackAIAnswer = async () => {
   if (!aiResponse.value) return;
 
-  // PLayback AI answer
+  // Playback AI answer if enabled
   const aiAnswer = aiResponse.value["ai_answer"];
-  if (aiAnswer) {
+  if (aiAnswer && isPlaybackEnabled.value) {
     try {
-      const response = await BackendService().playbackAnswer(aiResponse.value["ai_answer"]);
+      await BackendService().playbackAnswer(aiResponse.value["ai_answer"]);
       openSnackbar({ props: { text: "Action was performed successfully" } });
     } catch (error) {}
   }
+};
+
+const onPressRunAction = async () => {
+  if (!aiResponse.value) return;
 
   // Run the action
   try {
@@ -133,22 +143,34 @@ onMounted(() => {
               :disabled="isLoading"
             >
               <template #prepend-inner>
-                <v-menu>
-                  <template #activator="{ props }">
-                    <v-icon v-bind="props">mdi-robot-confused</v-icon>
-                  </template>
-                  <v-list>
-                    <v-list-item
-                      v-for="(model, index) in availableModels"
-                      :key="index"
-                      :value="model"
-                      :active="pickedModel === model"
-                      @click="pickedModel = model"
-                    >
-                      <v-list-item-title>{{ model }}</v-list-item-title>
-                    </v-list-item>
-                  </v-list>
-                </v-menu>
+                <div class="d-flex flex-column align-center">
+                  <v-menu>
+                    <template #activator="{ props }">
+                      <v-icon v-bind="props">mdi-robot-confused</v-icon>
+                    </template>
+                    <v-list>
+                      <v-list-item
+                        v-for="(model, index) in availableModels"
+                        :key="index"
+                        :value="model"
+                        :active="pickedModel === model"
+                        @click="pickedModel = model"
+                      >
+                        <v-list-item-title>{{ model }}</v-list-item-title>
+                      </v-list-item>
+                    </v-list>
+                  </v-menu>
+                  <v-icon
+                    class="mt-1"
+                    :color="isPlaybackEnabled ? 'primary' : 'grey'"
+                    style="cursor: pointer"
+                    @click="isPlaybackEnabled = !isPlaybackEnabled"
+                    :aria-pressed="isPlaybackEnabled"
+                    title="Toggle AI answer playback"
+                  >
+                    {{ isPlaybackEnabled ? "mdi-headphones" : "mdi-headphones-off" }}
+                  </v-icon>
+                </div>
               </template>
             </v-textarea>
           </v-col>
