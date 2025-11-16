@@ -12,6 +12,13 @@ export const TextToActionActionService = () => {
     return response.data;
   };
 
+  const createAction = async (data: any) => {
+    const response = await api.post(`${baseUrl}/actions`, data, {
+      headers: { Authorization: `Bearer ${token}` },
+    });
+    return response.data;
+  };
+
   const updateAction = async (id: number, data: any) => {
     const response = await api.put(`${baseUrl}/actions/${id}`, data, {
       headers: { Authorization: `Bearer ${token}` },
@@ -38,5 +45,6 @@ export const TextToActionActionService = () => {
     updateAction,
     deleteAction,
     deleteActions,
+    createAction,
   };
 };
