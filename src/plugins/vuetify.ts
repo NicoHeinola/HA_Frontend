@@ -5,7 +5,10 @@
  */
 
 // Styles
+//@ts-ignore
 import "@mdi/font/css/materialdesignicons.css";
+
+//@ts-ignore
 import "vuetify/styles";
 
 // Composables
@@ -19,13 +22,14 @@ export default createVuetify({
       dark: {
         dark: true,
         colors: {
-          primary: "#FFD600",
-          secondary: "#00CAFF",
-          error: "#FF1744",
-          success: "#00C853",
+          primary: "#0891B2",
+          secondary: "#F97316",
+          error: "#EF4444",
+          success: "#22C55E",
+          warning: "#FBBF24",
 
-          surface: "#121212",
-          background: "#0A0A0A",
+          surface: "#1C1917",
+          background: "#0C0A09",
         },
       },
     },

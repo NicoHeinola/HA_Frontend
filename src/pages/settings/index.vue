@@ -139,7 +139,7 @@ onMounted(async () => {
       </v-col>
 
       <v-col cols="12" class="d-flex align-center justify-end">
-        <v-btn @click="saveTextToActionSettings" :loading="!!isLoading"> Save </v-btn>
+        <v-btn color="success" @click="saveTextToActionSettings" :loading="!!isLoading"> Save </v-btn>
       </v-col>
     </v-row>
     <v-row>
