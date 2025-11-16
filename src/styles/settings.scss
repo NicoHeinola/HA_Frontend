@@ -8,3 +8,14 @@
 // @use 'vuetify/settings' with (
 //   $color-pack: false
 // );
+
+.required {
+  .v-field-label::after,
+  .v-label::after {
+    content: ' *';
+    color: #FF1744;
+    margin-left: 0.25rem;
+    display: inline-block;
+    pointer-events: none;
+  }
+}

@@ -6,15 +6,19 @@ import { useSnackbar } from "@/components/use-snackbar/useSnackbar";
 import { useErrorSnackbar } from "@/utils/errorSnackbar";
 import { useConfirm } from "@/components/use-dialog/confirm/useConfirm";
 import type TextToActionAction from "@/models/text-to-action/TextToActionAction";
+import { useDialog } from "@/components/use-dialog/useDialog";
+import TextToActionActionDialog from "@/components/text-to-action/action-dialog/TextToActionActionDialog.vue";
+import { TextToActionActionService } from "@/services/text-to-action/TextToActionAction.service";
 
 const textToActionSettings = ref<TextToActionSetting[]>([]);
 const textToActionActions = ref<TextToActionAction[]>([]);
 
 const isLoading = ref(false);
 const isSeeding = ref(false);
-const openSnackbar = useSnackbar();
 const { errorSnackbar } = useErrorSnackbar();
+const openSnackbar = useSnackbar();
 const openConfirm = useConfirm();
+const openDialog = useDialog();
 
 const getTextToActionSettings = async () => {
   isLoading.value = true;
@@ -23,6 +27,17 @@ const getTextToActionSettings = async () => {
   } catch (error) {
     errorSnackbar(error, openSnackbar);
     textToActionSettings.value = [];
+  }
+  isLoading.value = false;
+};
+
+const getTextToActionActions = async () => {
+  isLoading.value = true;
+  try {
+    textToActionActions.value = await TextToActionActionService().getActions();
+  } catch (error) {
+    errorSnackbar(error, openSnackbar);
+    textToActionActions.value = [];
   }
   isLoading.value = false;
 };
@@ -51,6 +66,15 @@ const seedTextToActionSettings = async () => {
 };
 
 const saveTextToActionSettings = async () => {
+  const ok = await openConfirm({
+    props: {
+      title: "Save General TTA Settings",
+      text: "Are you sure you want to save the General TTA settings?",
+    },
+  });
+
+  if (!ok) return;
+
   isLoading.value = true;
 
   try {
@@ -70,7 +94,17 @@ const saveTextToActionSettings = async () => {
   isLoading.value = false;
 };
 
-onMounted(getTextToActionSettings);
+const openActionDialog = async () => {
+  openDialog({
+    component: TextToActionActionDialog,
+    props: {},
+  });
+};
+
+onMounted(async () => {
+  await getTextToActionSettings();
+  await getTextToActionActions();
+});
 </script>
 
 <template>
@@ -104,6 +138,15 @@ onMounted(getTextToActionSettings);
         <v-btn @click="saveTextToActionSettings" :loading="!!isLoading"> Save </v-btn>
       </v-col>
     </v-row>
-    <v-row></v-row>
+    <v-row>
+      <v-col cols="12" class="d-flex align-center justify-space-between">
+        <h2>Actions</h2>
+        <div class="d-flex align-center ga-2">
+          <v-btn prepend-icon="mdi-plus" variant="outlined" @click="openActionDialog" :loading="!!isLoading">
+            New Action
+          </v-btn>
+        </div>
+      </v-col>
+    </v-row>
   </v-container>
 </template>
