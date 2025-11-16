@@ -8,17 +8,16 @@ const props = defineProps<{
   isLoading?: boolean;
 }>();
 
+const metaRef = ref();
 const allRules = rules();
-
 const action = defineModel<TextToActionAction>({ required: true });
-
-const metaTextarea = ref();
+const isValid = defineModel<boolean>("isValid", { default: false });
 
 function handleMetaTab(event: KeyboardEvent) {
   if (event.key === "Tab") {
     event.preventDefault();
 
-    const textarea = metaTextarea.value?.$el?.querySelector("textarea");
+    const textarea = metaRef.value?.$el?.querySelector("textarea");
     if (!textarea) return;
 
     // Insert a tab
@@ -35,7 +34,7 @@ function handleMetaTab(event: KeyboardEvent) {
 </script>
 
 <template>
-  <v-form>
+  <v-form v-model="isValid">
     <v-row>
       <v-col cols="12">
         <v-text-field
@@ -54,7 +53,7 @@ function handleMetaTab(event: KeyboardEvent) {
           label="Meta (JSON)"
           v-model="action.meta"
           :loading="props.isLoading"
-          ref="metaTextarea"
+          ref="metaRef"
           rows="10"
           @keydown="handleMetaTab"
         />
