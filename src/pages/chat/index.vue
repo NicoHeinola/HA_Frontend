@@ -28,6 +28,17 @@ const aiResponseTextParts = computed(() => {
   return responseText.split("\n").filter((part: string) => part.trim() !== "");
 });
 
+const aiResponseAction = computed(() => {
+  const action = aiResponse.value?.["action"] || null;
+
+  const blacklistedActions = ["just_chatting"];
+  if (blacklistedActions.includes(action)) {
+    return null;
+  }
+
+  return action;
+});
+
 const getAvailableModels = async () => {
   isLoadingModels.value = true;
 
@@ -67,7 +78,6 @@ const onEnter = async (event: KeyboardEvent) => {
       chatMessage.value = "";
     }
   } catch (error) {
-    isSendingMessage.value = false;
     aiResponse.value = {};
     errorSnackbar(error, openSnackbar);
     return;
@@ -97,7 +107,7 @@ onMounted(() => {
               label="Type your message here..."
               v-model="chatMessage"
               :loading="isLoading"
-              :disabled="isSendingMessage"
+              :disabled="isLoading"
             >
               <template #prepend-inner>
                 <v-menu>
@@ -119,13 +129,21 @@ onMounted(() => {
               </template>
             </v-textarea>
           </v-col>
-          <v-col cols="12" class="pt-0">
+          <v-col cols="12" class="pt-0 d-flex justify-space-between align-center">
             <text-label class="text-grey-darken-3">Picked model: {{ pickedModel }}</text-label>
+            <v-slide-x-reverse-transition>
+              <v-btn :loading="isLoading" :disabled="isLoading" append-icon="mdi-play" v-if="aiResponseAction">
+                {{ aiResponseAction }}
+                <v-tooltip activator="parent">
+                  <p>Details: {{ aiResponse?.["params"] }}</p>
+                </v-tooltip>
+              </v-btn>
+            </v-slide-x-reverse-transition>
           </v-col>
           <v-col cols="12">
             <div style="height: 250px" class="overflow-y-auto">
               <text-label class="mb-2">AI Response:</text-label>
-              <template v-if="!isSendingMessage">
+              <template v-if="!isLoading">
                 <div v-for="(part, index) in aiResponseTextParts" :key="index" class="mb-2">
                   <p>{{ part }}</p>
                 </div>
