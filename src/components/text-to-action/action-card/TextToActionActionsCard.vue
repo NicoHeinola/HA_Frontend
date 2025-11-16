@@ -29,13 +29,17 @@ const getShortenedText = (text: any, maxLength: number) => {
   return text;
 };
 
-const openEditDialog = () => {
-  openDialog({
+const openEditDialog = async () => {
+  const editedAction = await openDialog({
     component: TextToActionActionDialog,
     props: {
-      action: action,
+      action: JSON.parse(JSON.stringify(action.value)),
     },
   });
+
+  if (!editedAction) return;
+
+  action.value = editedAction;
 };
 
 const deleteAction = async () => {

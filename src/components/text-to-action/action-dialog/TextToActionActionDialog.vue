@@ -9,7 +9,7 @@ const props = defineProps<{
 }>();
 
 const emit = defineEmits<{
-  (e: "resolve", payload: boolean): void;
+  (e: "resolve", payload: TextToActionAction | false): void;
 }>();
 
 const action = ref<TextToActionAction>(
@@ -37,7 +37,7 @@ const save = async () => {
 
     openSnackbar({ props: { text: "Action saved successfully" } });
 
-    emit("resolve", true);
+    emit("resolve", action.value);
   } catch (error) {
     errorSnackbar(error, openSnackbar);
   } finally {

@@ -8,7 +8,7 @@ export const rules = () => {
     (v: string) => (v && v.length <= 200) || "Name must be less than 200 characters",
   ];
 
-  rules["meta"] = [(v: string) => isValidJSON(v) || "Meta must be valid JSON"];
+  rules["meta"] = [(v: string) => !v || v.trim() === "" || isValidJSON(v) || "Meta must be valid JSON"];
 
   return rules;
 };
