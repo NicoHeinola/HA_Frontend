@@ -97,11 +97,7 @@ onMounted(getTextToActionSettings);
       </v-col>
 
       <v-col cols="12">
-        <text-to-action-settings-form
-          v-model:settings="textToActionSettings"
-          v-model:actions="textToActionActions"
-          :isLoading="isSeeding || isLoading"
-        />
+        <text-to-action-settings-form v-model="textToActionSettings" :isLoading="isSeeding || isLoading" />
       </v-col>
 
       <v-col cols="12" class="d-flex align-center justify-end">

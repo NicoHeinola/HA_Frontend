@@ -1,15 +1,12 @@
 <script lang="ts" setup>
 import { defineModel, defineProps } from "vue";
 import TextLabel from "@/components/text-label/TextLabel.vue";
-import { useDialog } from "@/components/use-dialog/useDialog";
 
 const props = defineProps<{
   isLoading?: boolean;
 }>();
 
-const settings = defineModel<any[]>("settings", { required: true });
-
-const isSeeding = ref(false);
+const settings = defineModel<any[]>({ required: true });
 
 const findSettingByKey = (settings: any[], key: string) => {
   return settings.find((s) => s.key === key);

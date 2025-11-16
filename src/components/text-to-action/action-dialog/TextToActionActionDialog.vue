@@ -3,7 +3,7 @@ import type TextToActionAction from "@/models/text-to-action/TextToActionAction"
 
 const props = withDefaults(defineProps<{}>(), {});
 
-defineModel<TextToActionAction>("action", { default: () => {} });
+defineModel<TextToActionAction>("action", { required: true, default: () => ({}) });
 
 const emit = defineEmits<{
   (e: "resolve", payload: boolean): void;
@@ -14,7 +14,7 @@ const emit = defineEmits<{
   <v-card>
     <v-card-title>Edit Action </v-card-title>
     <v-card-text>
-      <text-to-action-action-form v-model:action="action" />
+      <text-to-action-action-form v-model="action" />
     </v-card-text>
     <v-card-actions class="d-flex justify-end">
       <v-btn variant="outlined" color="error" @click="emit('resolve', false)">Cancel</v-btn>
