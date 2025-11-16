@@ -11,7 +11,8 @@ const props = defineProps<{
 }>();
 
 const emit = defineEmits<{
-  (e: "seeded"): void;
+  (e: "seed:settings"): void;
+  (e: "save:settings"): void;
 }>();
 
 const settings = defineModel<any[]>("settings", { required: true });
@@ -20,6 +21,8 @@ const openConfirm = useConfirm();
 const isSeeding = ref(false);
 const openSnackbar = useSnackbar();
 const { errorSnackbar } = useErrorSnackbar();
+
+const isLoading = computed(() => props.isLoading || isSeeding.value);
 
 const findSettingByKey = (settings: any[], key: string) => {
   return settings.find((s) => s.key === key);
@@ -41,17 +44,7 @@ const seedTextToActionSettings = async () => {
 
   if (!ok) return;
 
-  isSeeding.value = true;
-
-  try {
-    await TextToActionSettingService().seedSettings({ replace: true });
-    openSnackbar({ props: { text: "TTA Settings seeded" } });
-    emit("seeded");
-  } catch (error) {
-    errorSnackbar(error, openSnackbar);
-  }
-
-  isSeeding.value = false;
+  emit("seed:settings");
 };
 </script>
 
@@ -60,7 +53,13 @@ const seedTextToActionSettings = async () => {
     <v-col cols="12" class="d-flex align-center justify-space-between">
       <h2>General</h2>
       <div class="d-flex align-center ga-2">
-        <v-btn color="error" prepend-icon="mdi-seed" @click="seedTextToActionSettings" :isLoading="!!isSeeding">
+        <v-btn
+          color="error"
+          prepend-icon="mdi-seed"
+          variant="outlined"
+          @click="seedTextToActionSettings"
+          :loading="!!isLoading"
+        >
           Seed
         </v-btn>
       </div>
@@ -87,6 +86,9 @@ const seedTextToActionSettings = async () => {
         label="System prompt"
         rows="25"
       ></v-textarea>
+    </v-col>
+    <v-col cols="12" class="d-flex align-center justify-end">
+      <v-btn @click="emit('save:settings')" :loading="!!isLoading"> Save </v-btn>
     </v-col>
   </v-row>
   <v-row>

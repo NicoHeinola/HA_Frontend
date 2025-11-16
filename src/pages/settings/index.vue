@@ -24,6 +24,40 @@ const getTextToActionSettings = async () => {
   isLoading.value = false;
 };
 
+const seedTextToActionSettings = async () => {
+  isSeeding.value = true;
+
+  try {
+    await TextToActionSettingService().seedSettings({ replace: true });
+    openSnackbar({ props: { text: "TTA Settings seeded" } });
+    await getTextToActionSettings();
+  } catch (error) {
+    errorSnackbar(error, openSnackbar);
+  }
+
+  isSeeding.value = false;
+};
+
+const saveTextToActionSettings = async () => {
+  isLoading.value = true;
+
+  try {
+    for (const setting of textToActionSettings.value) {
+      if (!setting.id) continue;
+
+      await TextToActionSettingService().updateSetting(setting.id, setting);
+    }
+
+    openSnackbar({ props: { text: "General TTA Settings saved" } });
+
+    await getTextToActionSettings();
+  } catch (error) {
+    errorSnackbar(error, openSnackbar);
+  }
+
+  isLoading.value = false;
+};
+
 onMounted(getTextToActionSettings);
 </script>
 
@@ -35,7 +69,8 @@ onMounted(getTextToActionSettings);
       </v-col>
     </v-row>
     <text-to-action-settings-form
-      @seeded="getTextToActionSettings"
+      @seed:settings="seedTextToActionSettings"
+      @save:settings="saveTextToActionSettings"
       v-model:settings="textToActionSettings"
       :isLoading="isSeeding || isLoading"
     />
