@@ -28,6 +28,15 @@ const getTextToActionSettings = async () => {
 };
 
 const seedTextToActionSettings = async () => {
+  const ok = await openConfirm({
+    props: {
+      title: "Seed General TTA Settings",
+      text: "Are you sure you want to seed General TTA settings? This will overwrite existing General TTA settings.",
+    },
+  });
+
+  if (!ok) return;
+
   isSeeding.value = true;
 
   try {
@@ -71,12 +80,34 @@ onMounted(getTextToActionSettings);
         <h1>TTA Settings</h1>
       </v-col>
     </v-row>
-    <text-to-action-settings-form
-      @seed:settings="seedTextToActionSettings"
-      @save:settings="saveTextToActionSettings"
-      v-model:settings="textToActionSettings"
-      v-model:actions="textToActionActions"
-      :isLoading="isSeeding || isLoading"
-    />
+    <v-row>
+      <v-col cols="12" class="d-flex align-center justify-space-between">
+        <h2>General</h2>
+        <div class="d-flex align-center ga-2">
+          <v-btn
+            color="error"
+            prepend-icon="mdi-seed"
+            variant="outlined"
+            @click="seedTextToActionSettings"
+            :loading="!!isLoading"
+          >
+            Seed
+          </v-btn>
+        </div>
+      </v-col>
+
+      <v-col cols="12">
+        <text-to-action-settings-form
+          v-model:settings="textToActionSettings"
+          v-model:actions="textToActionActions"
+          :isLoading="isSeeding || isLoading"
+        />
+      </v-col>
+
+      <v-col cols="12" class="d-flex align-center justify-end">
+        <v-btn @click="saveTextToActionSettings" :loading="!!isLoading"> Save </v-btn>
+      </v-col>
+    </v-row>
+    <v-row></v-row>
   </v-container>
 </template>
