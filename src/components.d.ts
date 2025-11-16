@@ -14,6 +14,7 @@ declare module 'vue' {
     ActionDialog: typeof import('./components/text-to-action/action-dialog/ActionDialog.vue')['default']
     AppFooter: typeof import('./components/AppFooter.vue')['default']
     CodeBlock: typeof import('./components/code-block/CodeBlock.vue')['default']
+    CodeBlockEditor: typeof import('./components/code-block-editor/CodeBlockEditor.vue')['default']
     ConfirmDialog: typeof import('./components/use-dialog/confirm/ConfirmDialog.vue')['default']
     DialogProvider: typeof import('./components/use-dialog/DialogProvider.vue')['default']
     HelloWorld: typeof import('./components/HelloWorld.vue')['default']

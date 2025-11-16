@@ -41,6 +41,7 @@ export default createVuetify({
     },
     VTooltip: {
       location: "bottom",
+      maxWidth: 450,
     },
     VTextarea: {
       variant: "outlined",

@@ -1,21 +1,17 @@
 <script lang="ts" setup>
 import type TextToActionAction from "@/models/text-to-action/TextToActionAction";
 
-const props = defineProps<{}>();
+const action = defineModel<TextToActionAction>({ required: true });
 
-const description = computed(() => {
-  if (!action.value.description) return "No description provided";
+const getShortenedText = (text: any, maxLength: number) => {
+  if (!text) return "";
 
-  const MAX_LETTERS: number = 120;
-
-  if (action.value.description.length > MAX_LETTERS) {
-    return action.value.description.slice(0, MAX_LETTERS) + "...";
+  if (text.length > maxLength) {
+    return text.slice(0, maxLength) + "...";
   }
 
-  return action.value.description;
-});
-
-const action = defineModel<TextToActionAction>({ required: true });
+  return text;
+};
 </script>
 
 <template>
@@ -31,7 +27,10 @@ const action = defineModel<TextToActionAction>({ required: true });
     </v-card-title>
     <v-card-text style="flex: 1 1 auto; display: flex; flex-direction: column; min-height: 0">
       <div style="flex: 1 1 auto; min-height: 0; overflow: auto" class="mb-5">
-        <p>{{ description }}</p>
+        <p>
+          {{ getShortenedText(action.description || "No description", 300) }}
+          <v-tooltip :text="getShortenedText(action.description, 500)" activator="parent"></v-tooltip>
+        </p>
       </div>
       <div style="flex: 0 0 150px; height: 150px; min-height: 150px; max-height: 150px">
         <code-block class="h-100">{{ action.meta }}</code-block>
