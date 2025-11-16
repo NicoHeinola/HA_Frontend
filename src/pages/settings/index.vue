@@ -162,7 +162,10 @@ onMounted(async () => {
             :key="action.id"
             class="mb-4"
           >
-            <text-to-action-actions-card v-model="(textToActionActions[i] as TextToActionAction)" />
+            <text-to-action-actions-card
+              @delete="getTextToActionActions"
+              v-model="(textToActionActions[i] as TextToActionAction)"
+            />
           </v-col>
         </v-row>
       </v-col>

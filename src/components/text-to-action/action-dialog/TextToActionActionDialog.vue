@@ -30,9 +30,9 @@ const save = async () => {
 
   try {
     if (action.value.id) {
-      await TextToActionActionService().updateAction(action.value.id, action.value);
+      action.value = await TextToActionActionService().updateAction(action.value.id, action.value);
     } else {
-      await TextToActionActionService().createAction(action.value);
+      action.value = await TextToActionActionService().createAction(action.value);
     }
 
     openSnackbar({ props: { text: "Action saved successfully" } });
