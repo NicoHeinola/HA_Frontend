@@ -14,7 +14,15 @@ const emit = defineEmits<{
 
 const action = ref<TextToActionAction>(
   props.action || {
-    meta: '{\n\t"params": {\n\t\t"param1": {\n\t\t\t"name": "INSERT_NAME",\n\t\t\t"description": "INSERT_DESCRIPTION",\n\t\t\t"allowed_values": ["VALUE_1", "VALUE_2"]\n\t\t}\n\t}\n}',
+    meta: {
+      params: {
+        param1: {
+          name: "INSERT_NAME",
+          description: "INSERT_DESCRIPTION",
+          allowed_values: ["VALUE_1", "VALUE_2"],
+        },
+      },
+    },
   }
 );
 
