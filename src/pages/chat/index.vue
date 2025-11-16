@@ -7,7 +7,7 @@ import { useErrorSnackbar } from "@/utils/errorSnackbar";
 const availableModels = ref<string[]>([]);
 const pickedModel = ref<string>("");
 const chatMessage = ref<string>("");
-const aiResponse = ref<Record<string, any>>({});
+const aiResponse = ref<Record<string, any> | null>(null);
 
 const isSendingMessage = ref(false);
 const isLoadingModels = ref(false);
@@ -20,7 +20,10 @@ const openSnackbar = useSnackbar();
 const { errorSnackbar } = useErrorSnackbar();
 
 const aiResponseTextParts = computed(() => {
-  const responseText = aiResponse.value["ai_answer"] || "";
+  const responseText = aiResponse.value?.["ai_answer"] || "";
+
+  if (!responseText && aiResponse.value) return ["AI didn't provide an answer."];
+  else if (!responseText && !aiResponse.value) return ["Send a message to get a response."];
 
   return responseText.split("\n").filter((part: string) => part.trim() !== "");
 });
@@ -54,22 +57,23 @@ const onEnter = async (event: KeyboardEvent) => {
   isSendingMessage.value = true;
 
   try {
-    aiResponse.value = await TextToActionService().textToAction(chatMessage.value, {
+    const response = await TextToActionService().textToAction(chatMessage.value, {
       model: pickedModel.value,
     });
 
-    if (!aiResponse.value) {
-      throw new Error("No response from AI service");
+    aiResponse.value = response;
+
+    if (response && Object.keys(response).length > 0) {
+      chatMessage.value = "";
     }
   } catch (error) {
     isSendingMessage.value = false;
+    aiResponse.value = {};
     errorSnackbar(error, openSnackbar);
     return;
   } finally {
     isSendingMessage.value = false;
   }
-
-  chatMessage.value = "";
 };
 
 onMounted(() => {
