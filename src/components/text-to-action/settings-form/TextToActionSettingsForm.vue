@@ -2,9 +2,10 @@
 import { defineModel, defineProps } from "vue";
 import TextLabel from "@/components/text-label/TextLabel.vue";
 import { useConfirm } from "@/components/use-dialog/confirm/useConfirm";
-import { TextToActionSettingService } from "@/services/text-to-action/TextToActionSetting.service";
 import { useSnackbar } from "@/components/use-snackbar/useSnackbar";
 import { useErrorSnackbar } from "@/utils/errorSnackbar";
+import { useDialog } from "@/components/use-dialog/useDialog";
+import ActionDialog from "../action-dialog/ActionDialog.vue";
 
 const props = defineProps<{
   isLoading?: boolean;
@@ -15,8 +16,11 @@ const emit = defineEmits<{
   (e: "save:settings"): void;
 }>();
 
+const actions = defineModel<any[]>("actions", { required: true });
+
 const settings = defineModel<any[]>("settings", { required: true });
 const openConfirm = useConfirm();
+const openDialog = useDialog();
 
 const isSeeding = ref(false);
 const openSnackbar = useSnackbar();
@@ -46,6 +50,15 @@ const seedTextToActionSettings = async () => {
 
   emit("seed:settings");
 };
+
+const openActionDialog = async () => {
+  const response = await openDialog({
+    component: ActionDialog,
+    props: {},
+  });
+
+  console.log("Action Dialog response:", response);
+};
 </script>
 
 <template>
@@ -68,7 +81,7 @@ const seedTextToActionSettings = async () => {
   <v-row>
     <v-col cols="12" class="pb-0">
       <text-label class="text-grey d-flex ga-1">
-        <span> Existing keywords: </span>
+        <span> Keywords: </span>
         <span class="text-secondary">
           {actions}
           <v-tooltip
@@ -94,6 +107,7 @@ const seedTextToActionSettings = async () => {
   <v-row>
     <v-col class="d-flex align-center justify-space-between">
       <h2>Actions</h2>
+      <v-btn prepend-icon="mdi-plus" @click="openActionDialog" :loading="!!isLoading"> Add new </v-btn>
     </v-col>
   </v-row>
 </template>

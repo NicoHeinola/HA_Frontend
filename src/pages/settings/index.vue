@@ -5,8 +5,11 @@ import { TextToActionSettingService } from "@/services/text-to-action/TextToActi
 import { useSnackbar } from "@/components/use-snackbar/useSnackbar";
 import { useErrorSnackbar } from "@/utils/errorSnackbar";
 import { useConfirm } from "@/components/use-dialog/confirm/useConfirm";
+import type TextToActionAction from "@/models/text-to-action/TextToActionAction";
 
 const textToActionSettings = ref<TextToActionSetting[]>([]);
+const textToActionActions = ref<TextToActionAction[]>([]);
+
 const isLoading = ref(false);
 const isSeeding = ref(false);
 const openSnackbar = useSnackbar();
@@ -72,6 +75,7 @@ onMounted(getTextToActionSettings);
       @seed:settings="seedTextToActionSettings"
       @save:settings="saveTextToActionSettings"
       v-model:settings="textToActionSettings"
+      v-model:actions="textToActionActions"
       :isLoading="isSeeding || isLoading"
     />
   </v-container>

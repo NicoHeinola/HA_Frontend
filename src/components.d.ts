@@ -11,6 +11,7 @@ export {}
 /* prettier-ignore */
 declare module 'vue' {
   export interface GlobalComponents {
+    ActionDialog: typeof import('./components/text-to-action/action-dialog/ActionDialog.vue')['default']
     AppFooter: typeof import('./components/AppFooter.vue')['default']
     ConfirmDialog: typeof import('./components/use-dialog/confirm/ConfirmDialog.vue')['default']
     DialogProvider: typeof import('./components/use-dialog/DialogProvider.vue')['default']
@@ -22,6 +23,6 @@ declare module 'vue' {
     SnackbarProvider: typeof import('./components/use-snackbar/SnackbarProvider.vue')['default']
     TextLabel: typeof import('./components/text-label/TextLabel.vue')['default']
     TextToActionActionsCard: typeof import('./components/text-to-action/action-card/TextToActionActionsCard.vue')['default']
-    TextToActionSettingsForm: typeof import('./components/text-to-action/action-form/TextToActionSettingsForm.vue')['default']
+    TextToActionSettingsForm: typeof import('./components/text-to-action/settings-form/TextToActionSettingsForm.vue')['default']
   }
 }
