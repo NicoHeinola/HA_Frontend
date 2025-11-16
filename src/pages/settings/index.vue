@@ -95,10 +95,14 @@ const saveTextToActionSettings = async () => {
 };
 
 const openActionDialog = async () => {
-  openDialog({
+  const saved = await openDialog({
     component: TextToActionActionDialog,
     props: {},
   });
+
+  if (!saved) return;
+
+  await getTextToActionActions();
 };
 
 onMounted(async () => {
@@ -146,6 +150,13 @@ onMounted(async () => {
             New Action
           </v-btn>
         </div>
+      </v-col>
+      <v-col cols="12">
+        <v-row>
+          <v-col cols="4" v-for="(action, i) in textToActionActions" :key="action.id" class="mb-4">
+            <text-to-action-actions-card v-model="(textToActionActions[i] as TextToActionAction)" />
+          </v-col>
+        </v-row>
       </v-col>
     </v-row>
   </v-container>
