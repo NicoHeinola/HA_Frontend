@@ -11,17 +11,13 @@ export {}
 /* prettier-ignore */
 declare module 'vue' {
   export interface GlobalComponents {
-    ActionDialog: typeof import('./components/text-to-action/action-dialog/ActionDialog.vue')['default']
-    AppFooter: typeof import('./components/AppFooter.vue')['default']
     CodeBlock: typeof import('./components/code-block/CodeBlock.vue')['default']
     CodeBlockEditor: typeof import('./components/code-block-editor/CodeBlockEditor.vue')['default']
     ConfirmDialog: typeof import('./components/use-dialog/confirm/ConfirmDialog.vue')['default']
     DialogProvider: typeof import('./components/use-dialog/DialogProvider.vue')['default']
-    HelloWorld: typeof import('./components/HelloWorld.vue')['default']
     NavigationBar: typeof import('./components/navigation/NavigationBar.vue')['default']
     RouterLink: typeof import('vue-router')['RouterLink']
     RouterView: typeof import('vue-router')['RouterView']
-    SettingsForm: typeof import('./components/text-to-action/action-form/TextToActionSettingsForm.vue')['default']
     SnackbarProvider: typeof import('./components/use-snackbar/SnackbarProvider.vue')['default']
     TextLabel: typeof import('./components/text-label/TextLabel.vue')['default']
     TextToActionActionDialog: typeof import('./components/text-to-action/action-dialog/TextToActionActionDialog.vue')['default']

@@ -4,13 +4,15 @@
  * Automatic routes for `./src/pages/*.vue`
  */
 
+// @ts-ignore
 import { setupLayouts } from "virtual:generated-layouts";
 // Composables
 import { createRouter, createWebHistory } from "vue-router";
+// @ts-ignore
 import { routes } from "vue-router/auto-routes";
 
 const router = createRouter({
-  history: createWebHistory(import.meta.env.BASE_URL),
+  history: createWebHistory((import.meta as any).env.BASE_URL),
   routes: [
     {
       path: "/",
