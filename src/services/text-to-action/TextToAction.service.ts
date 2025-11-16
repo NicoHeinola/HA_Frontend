@@ -18,10 +18,10 @@ export const TextToActionService = () => {
     return response.data;
   };
 
-  const textToAction = async (text: string) => {
+  const textToAction = async (text: string, params: Record<string, any> = {}) => {
     const response = await api.post(
       `${baseUrl}/text-to-action`,
-      { text },
+      { text, ...params },
       {
         headers: {
           Authorization: `Bearer ${token}`,

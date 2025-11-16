@@ -5,6 +5,7 @@ import { TextToActionService } from "@/services/text-to-action/TextToAction.serv
 import { useErrorSnackbar } from "@/utils/errorSnackbar";
 
 const availableModels = ref<string[]>([]);
+const pickedModel = ref<string>("");
 const chatMessage = ref<string>("");
 const aiResponse = ref<Record<string, any>>({});
 
@@ -29,7 +30,13 @@ const getAvailableModels = async () => {
 
   try {
     const models = await TextToActionService().getModels();
-    availableModels.value = models;
+    availableModels.value = models["available_models"] || [];
+
+    if (availableModels.value.length > 0) {
+      pickedModel.value = availableModels.value[availableModels.value.length - 1] || "";
+    } else {
+      pickedModel.value = "";
+    }
   } catch (error) {
     errorSnackbar(error, openSnackbar);
   } finally {
@@ -47,7 +54,9 @@ const onEnter = async (event: KeyboardEvent) => {
   isSendingMessage.value = true;
 
   try {
-    aiResponse.value = await TextToActionService().textToAction(chatMessage.value);
+    aiResponse.value = await TextToActionService().textToAction(chatMessage.value, {
+      model: pickedModel.value,
+    });
 
     if (!aiResponse.value) {
       throw new Error("No response from AI service");
@@ -87,9 +96,27 @@ onMounted(() => {
               :disabled="isSendingMessage"
             >
               <template #prepend-inner>
-                <v-icon>mdi-chat-outline</v-icon>
+                <v-menu>
+                  <template #activator="{ props }">
+                    <v-icon v-bind="props">mdi-robot-confused</v-icon>
+                  </template>
+                  <v-list>
+                    <v-list-item
+                      v-for="(model, index) in availableModels"
+                      :key="index"
+                      :value="model"
+                      :active="pickedModel === model"
+                      @click="pickedModel = model"
+                    >
+                      <v-list-item-title>{{ model }}</v-list-item-title>
+                    </v-list-item>
+                  </v-list>
+                </v-menu>
               </template>
             </v-textarea>
+          </v-col>
+          <v-col cols="12" class="pt-0">
+            <text-label class="text-grey-darken-3">Picked model: {{ pickedModel }}</text-label>
           </v-col>
           <v-col cols="12">
             <div style="height: 250px" class="overflow-y-auto">
