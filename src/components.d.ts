@@ -22,6 +22,8 @@ declare module 'vue' {
     SettingsForm: typeof import('./components/text-to-action/action-form/TextToActionSettingsForm.vue')['default']
     SnackbarProvider: typeof import('./components/use-snackbar/SnackbarProvider.vue')['default']
     TextLabel: typeof import('./components/text-label/TextLabel.vue')['default']
+    TextToActionActionDialog: typeof import('./components/text-to-action/action-dialog/TextToActionActionDialog.vue')['default']
+    TextToActionActionForm: typeof import('./components/text-to-action/action-form/TextToActionActionForm.vue')['default']
     TextToActionActionsCard: typeof import('./components/text-to-action/action-card/TextToActionActionsCard.vue')['default']
     TextToActionSettingsForm: typeof import('./components/text-to-action/settings-form/TextToActionSettingsForm.vue')['default']
   }
