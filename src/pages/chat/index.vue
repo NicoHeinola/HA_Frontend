@@ -1,8 +1,10 @@
 <script lang="ts" setup>
 import TextLabel from "@/components/text-label/TextLabel.vue";
 import { useSnackbar } from "@/components/use-snackbar/useSnackbar";
+import type TextToActionAction from "@/models/text-to-action/TextToActionAction";
 import { BackendService } from "@/services/backend/TextToAction.service";
 import { TextToActionService } from "@/services/text-to-action/TextToAction.service";
+import { TextToActionActionService } from "@/services/text-to-action/TextToActionAction.service";
 import { useErrorSnackbar } from "@/utils/errorSnackbar";
 
 const availableModels = ref<string[]>([]);
@@ -10,13 +12,17 @@ const pickedModel = ref<string>("");
 const chatMessage = ref<string>("");
 const aiResponse = ref<Record<string, any> | null>(null);
 
+// List of all valid actions that the AI can suggest
+const allActions = ref<TextToActionAction[]>([]);
+
 const isSendingMessage = ref(false);
 const isLoadingModels = ref(false);
+const isLoadingActions = ref(false);
 
 const isPlaybackEnabled = ref(false);
 
 const isLoading = computed(() => {
-  return isSendingMessage.value || isLoadingModels.value;
+  return isSendingMessage.value || isLoadingModels.value || isLoadingActions.value;
 });
 
 const openSnackbar = useSnackbar();
@@ -34,13 +40,22 @@ const aiResponseTextParts = computed(() => {
 const aiResponseAction = computed(() => {
   const action = aiResponse.value?.["action"] || null;
 
-  const blacklistedActions = ["just_chatting", "answer_question"];
-  if (blacklistedActions.includes(action)) {
-    return null;
-  }
+  const isValidAction = allActions.value.find((a) => a.name === action);
+  if (!isValidAction) return null;
 
   return action;
 });
+
+const getTextToActionActions = async () => {
+  isLoadingActions.value = true;
+  try {
+    allActions.value = await TextToActionActionService().getActions();
+  } catch (error) {
+    errorSnackbar(error, openSnackbar);
+    allActions.value = [];
+  }
+  isLoadingActions.value = false;
+};
 
 const getAvailableModels = async () => {
   isLoadingModels.value = true;
@@ -121,6 +136,7 @@ const onPressRunAction = async () => {
 
 onMounted(() => {
   getAvailableModels();
+  getTextToActionActions();
 });
 </script>
 
