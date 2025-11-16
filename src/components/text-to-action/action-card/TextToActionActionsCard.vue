@@ -3,21 +3,39 @@ import type TextToActionAction from "@/models/text-to-action/TextToActionAction"
 
 const props = defineProps<{}>();
 
+const description = computed(() => {
+  if (!action.value.description) return "No description provided";
+
+  const MAX_LETTERS: number = 120;
+
+  if (action.value.description.length > MAX_LETTERS) {
+    return action.value.description.slice(0, MAX_LETTERS) + "...";
+  }
+
+  return action.value.description;
+});
+
 const action = defineModel<TextToActionAction>({ required: true });
 </script>
 
 <template>
-  <v-card>
-    <v-card-title>{{ action.name || "Unnamed Action" }}</v-card-title>
-    <v-card-text>
-      <v-row>
-        <v-col cols="12">
-          <p>{{ action.description || "No description provided" }}</p>
-        </v-col>
-        <v-col cols="12">
-          <code-block>{{ action.meta }}</code-block>
-        </v-col>
-      </v-row>
+  <v-card height="300px" class="d-flex flex-column">
+    <v-card-title class="d-flex justify-space-between align-center">
+      <p class="text-truncate">
+        {{ action.name || "Unnamed Action" }}
+      </p>
+      <div class="d-flex align-center ga-2">
+        <v-btn variant="text" icon="mdi-pencil" size="x-small"> </v-btn>
+        <v-btn color="error" variant="text" icon="mdi-trash-can" size="x-small"> </v-btn>
+      </div>
+    </v-card-title>
+    <v-card-text style="flex: 1 1 auto; display: flex; flex-direction: column; min-height: 0">
+      <div style="flex: 1 1 auto; min-height: 0; overflow: auto" class="mb-5">
+        <p>{{ description }}</p>
+      </div>
+      <div style="flex: 0 0 150px; height: 150px; min-height: 150px; max-height: 150px">
+        <code-block class="h-100">{{ action.meta }}</code-block>
+      </div>
     </v-card-text>
   </v-card>
 </template>

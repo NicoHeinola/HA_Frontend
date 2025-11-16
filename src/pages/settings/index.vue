@@ -153,7 +153,15 @@ onMounted(async () => {
       </v-col>
       <v-col cols="12">
         <v-row>
-          <v-col cols="4" v-for="(action, i) in textToActionActions" :key="action.id" class="mb-4">
+          <v-col
+            cols="6"
+            lg="4"
+            xl="3"
+            xxl="2"
+            v-for="(action, i) in textToActionActions"
+            :key="action.id"
+            class="mb-4"
+          >
             <text-to-action-actions-card v-model="(textToActionActions[i] as TextToActionAction)" />
           </v-col>
         </v-row>
