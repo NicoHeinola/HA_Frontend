@@ -96,7 +96,7 @@ const deleteAction = async () => {
           <v-tooltip :text="getShortenedText(action.description, 500)" activator="parent"></v-tooltip>
         </p>
       </div>
-      <div style="flex: 0 0 150px; height: 150px; min-height: 150px; max-height: 150px">
+      <div style="flex: 0 0 150px; height: 150px; min-height: 150px; max-height: 150px" v-if="action.meta">
         <code-block class="h-100">{{ action.meta }}</code-block>
       </div>
     </v-card-text>
