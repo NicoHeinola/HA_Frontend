@@ -101,7 +101,7 @@ const onPressRunAction = async () => {
 
   // Run the action
   try {
-    await BackendService().runAction(aiResponse.value);
+    await BackendService().runAction(aiResponse.value["action"], aiResponse.value["params"] || {});
     openSnackbar({ props: { text: "Action was performed successfully" } });
   } catch (error) {
     errorSnackbar(error, openSnackbar);
