@@ -1,6 +1,7 @@
 <script lang="ts" setup>
 import TextLabel from "@/components/text-label/TextLabel.vue";
 import { useSnackbar } from "@/components/use-snackbar/useSnackbar";
+import { BackendService } from "@/services/backend/TextToAction.service";
 import { TextToActionService } from "@/services/text-to-action/TextToAction.service";
 import { useErrorSnackbar } from "@/utils/errorSnackbar";
 
@@ -31,7 +32,7 @@ const aiResponseTextParts = computed(() => {
 const aiResponseAction = computed(() => {
   const action = aiResponse.value?.["action"] || null;
 
-  const blacklistedActions = ["just_chatting"];
+  const blacklistedActions = ["just_chatting", "answer_question"];
   if (blacklistedActions.includes(action)) {
     return null;
   }
@@ -86,6 +87,28 @@ const onEnter = async (event: KeyboardEvent) => {
   }
 };
 
+const onPressRunAction = async () => {
+  if (!aiResponse.value) return;
+
+  // PLayback AI answer
+  const aiAnswer = aiResponse.value["ai_answer"];
+  if (aiAnswer) {
+    try {
+      const response = await BackendService().playbackAnswer(aiResponse.value["ai_answer"]);
+      openSnackbar({ props: { text: "Action was performed successfully" } });
+    } catch (error) {}
+  }
+
+  // Run the action
+  try {
+    await BackendService().runAction(aiResponse.value);
+    openSnackbar({ props: { text: "Action was performed successfully" } });
+  } catch (error) {
+    errorSnackbar(error, openSnackbar);
+    return;
+  }
+};
+
 onMounted(() => {
   getAvailableModels();
 });
@@ -132,7 +155,13 @@ onMounted(() => {
           <v-col cols="12" class="pt-0 d-flex justify-space-between align-center">
             <text-label class="text-grey-darken-3">Picked model: {{ pickedModel }}</text-label>
             <v-slide-x-reverse-transition>
-              <v-btn :loading="isLoading" :disabled="isLoading" append-icon="mdi-play" v-if="aiResponseAction">
+              <v-btn
+                :loading="isLoading"
+                :disabled="isLoading"
+                append-icon="mdi-play"
+                v-if="aiResponseAction"
+                @click="onPressRunAction"
+              >
                 {{ aiResponseAction }}
                 <v-tooltip activator="parent">
                   <p>Details: {{ aiResponse?.["params"] }}</p>
