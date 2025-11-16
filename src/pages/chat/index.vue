@@ -4,10 +4,17 @@ import { useSnackbar } from "@/components/use-snackbar/useSnackbar";
 import { TextToActionService } from "@/services/text-to-action/TextToAction.service";
 import { useErrorSnackbar } from "@/utils/errorSnackbar";
 
+const availableModels = ref<string[]>([]);
 const chatMessage = ref<string>("");
 const aiResponse = ref<Record<string, any>>({});
 
-const sendingMessage = ref(false);
+const isSendingMessage = ref(false);
+const isLoadingModels = ref(false);
+
+const isLoading = computed(() => {
+  return isSendingMessage.value || isLoadingModels.value;
+});
+
 const openSnackbar = useSnackbar();
 const { errorSnackbar } = useErrorSnackbar();
 
@@ -17,6 +24,19 @@ const aiResponseTextParts = computed(() => {
   return responseText.split("\n").filter((part: string) => part.trim() !== "");
 });
 
+const getAvailableModels = async () => {
+  isLoadingModels.value = true;
+
+  try {
+    const models = await TextToActionService().getModels();
+    availableModels.value = models;
+  } catch (error) {
+    errorSnackbar(error, openSnackbar);
+  } finally {
+    isLoadingModels.value = false;
+  }
+};
+
 const onEnter = async (event: KeyboardEvent) => {
   if (!chatMessage.value.trim()) return;
 
@@ -24,7 +44,7 @@ const onEnter = async (event: KeyboardEvent) => {
 
   event.preventDefault();
 
-  sendingMessage.value = true;
+  isSendingMessage.value = true;
 
   try {
     aiResponse.value = await TextToActionService().textToAction(chatMessage.value);
@@ -33,15 +53,19 @@ const onEnter = async (event: KeyboardEvent) => {
       throw new Error("No response from AI service");
     }
   } catch (error) {
-    sendingMessage.value = false;
+    isSendingMessage.value = false;
     errorSnackbar(error, openSnackbar);
     return;
   } finally {
-    sendingMessage.value = false;
+    isSendingMessage.value = false;
   }
 
   chatMessage.value = "";
 };
+
+onMounted(() => {
+  getAvailableModels();
+});
 </script>
 
 <template>
@@ -59,8 +83,8 @@ const onEnter = async (event: KeyboardEvent) => {
               density="comfortable"
               label="Type your message here..."
               v-model="chatMessage"
-              :loading="sendingMessage"
-              :disabled="sendingMessage"
+              :loading="isLoading"
+              :disabled="isSendingMessage"
             >
               <template #prepend-inner>
                 <v-icon>mdi-chat-outline</v-icon>
@@ -70,7 +94,7 @@ const onEnter = async (event: KeyboardEvent) => {
           <v-col cols="12">
             <div style="height: 250px" class="overflow-y-auto">
               <text-label class="mb-2">AI Response:</text-label>
-              <template v-if="!sendingMessage">
+              <template v-if="!isSendingMessage">
                 <div v-for="(part, index) in aiResponseTextParts" :key="index" class="mb-2">
                   <p>{{ part }}</p>
                 </div>
