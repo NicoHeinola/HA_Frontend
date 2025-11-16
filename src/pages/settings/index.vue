@@ -24,29 +24,6 @@ const getTextToActionSettings = async () => {
   isLoading.value = false;
 };
 
-const seedTextToActionSettings = async () => {
-  const ok = await openConfirm({
-    props: {
-      title: "Seed TTA Settings",
-      text: "Are you sure you want to seed TTA settings? This will overwrite existing TTA settings.",
-    },
-  });
-
-  if (!ok) return;
-
-  isSeeding.value = true;
-
-  try {
-    await TextToActionSettingService().seedSettings({ replace: true });
-    openSnackbar({ props: { text: "TTA Settings seeded" } });
-    await getTextToActionSettings();
-  } catch (error) {
-    errorSnackbar(error, openSnackbar);
-  }
-
-  isSeeding.value = false;
-};
-
 onMounted(getTextToActionSettings);
 </script>
 
@@ -55,13 +32,12 @@ onMounted(getTextToActionSettings);
     <v-row>
       <v-col cols="12" class="d-flex align-center justify-space-between">
         <h1>TTA Settings</h1>
-        <div class="d-flex align-center ga-2">
-          <v-btn color="error" prepend-icon="mdi-seed" @click="seedTextToActionSettings" :isLoading="!!isSeeding">
-            Seed TTA Settings
-          </v-btn>
-        </div>
       </v-col>
     </v-row>
-    <text-to-action-settings-form v-model:settings="textToActionSettings" :isLoading="isSeeding || isLoading" />
+    <text-to-action-settings-form
+      @seeded="getTextToActionSettings"
+      v-model:settings="textToActionSettings"
+      :isLoading="isSeeding || isLoading"
+    />
   </v-container>
 </template>

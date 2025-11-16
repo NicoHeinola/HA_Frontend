@@ -1,12 +1,25 @@
 <script lang="ts" setup>
 import { defineModel, defineProps } from "vue";
 import TextLabel from "@/components/text-label/TextLabel.vue";
+import { useConfirm } from "@/components/use-dialog/confirm/useConfirm";
+import { TextToActionSettingService } from "@/services/text-to-action/TextToActionSetting.service";
+import { useSnackbar } from "@/components/use-snackbar/useSnackbar";
+import { useErrorSnackbar } from "@/utils/errorSnackbar";
 
 const props = defineProps<{
   isLoading?: boolean;
 }>();
 
+const emit = defineEmits<{
+  (e: "seeded"): void;
+}>();
+
 const settings = defineModel<any[]>("settings", { required: true });
+const openConfirm = useConfirm();
+
+const isSeeding = ref(false);
+const openSnackbar = useSnackbar();
+const { errorSnackbar } = useErrorSnackbar();
 
 const findSettingByKey = (settings: any[], key: string) => {
   return settings.find((s) => s.key === key);
@@ -17,12 +30,40 @@ const updateSettingValue = (settings: any[], key: string, value: string) => {
   if (!setting) return;
   setting.value = value;
 };
+
+const seedTextToActionSettings = async () => {
+  const ok = await openConfirm({
+    props: {
+      title: "Seed General TTA Settings",
+      text: "Are you sure you want to seed General TTA settings? This will overwrite existing General TTA settings.",
+    },
+  });
+
+  if (!ok) return;
+
+  isSeeding.value = true;
+
+  try {
+    await TextToActionSettingService().seedSettings({ replace: true });
+    openSnackbar({ props: { text: "TTA Settings seeded" } });
+    emit("seeded");
+  } catch (error) {
+    errorSnackbar(error, openSnackbar);
+  }
+
+  isSeeding.value = false;
+};
 </script>
 
 <template>
   <v-row>
     <v-col cols="12" class="d-flex align-center justify-space-between">
       <h2>General</h2>
+      <div class="d-flex align-center ga-2">
+        <v-btn color="error" prepend-icon="mdi-seed" @click="seedTextToActionSettings" :isLoading="!!isSeeding">
+          Seed
+        </v-btn>
+      </div>
     </v-col>
   </v-row>
   <v-row>
