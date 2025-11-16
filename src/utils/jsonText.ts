@@ -12,7 +12,7 @@ export const objectToJSONString = (obj: any): string => {
   }
 
   try {
-    return JSON.stringify(obj, null, 2);
+    return JSON.stringify(obj, null, "\t");
   } catch (e) {
     return "";
   }
