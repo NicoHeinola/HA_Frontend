@@ -18,10 +18,9 @@ export const objectToJSONString = (obj: any): string => {
   }
 };
 
-export const isValidJSON = (text: string): boolean => {
+export const isValidJSON = (text: string): any => {
   try {
-    JSON.parse(text);
-    return true;
+    return JSON.parse(text);
   } catch (e) {
     return false;
   }

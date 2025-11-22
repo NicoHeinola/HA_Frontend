@@ -9,6 +9,7 @@ import type TextToActionAction from "@/models/text-to-action/TextToActionAction"
 import { useDialog } from "@/components/use-dialog/useDialog";
 import TextToActionActionDialog from "@/components/text-to-action/action-dialog/TextToActionActionDialog.vue";
 import { TextToActionActionService } from "@/services/text-to-action/TextToActionAction.service";
+import { isValidJSON } from "@/utils/jsonText";
 
 const textToActionSettings = ref<TextToActionSetting[]>([]);
 const textToActionActions = ref<TextToActionAction[]>([]);
@@ -95,15 +96,36 @@ const saveTextToActionSettings = async () => {
   isLoading.value = false;
 };
 
-const openActionDialog = async () => {
+const openActionDialog = async (action?: TextToActionAction) => {
   const saved = await openDialog({
     component: TextToActionActionDialog,
-    props: {},
+    props: {
+      action: action ? JSON.parse(JSON.stringify(action)) : undefined,
+    },
   });
 
   if (!saved) return;
 
   await getTextToActionActions();
+};
+
+const importNewAction = async () => {
+  const dataStr = await navigator.clipboard.readText();
+  if (!dataStr) {
+    openSnackbar({ props: { color: "warning", text: "No data found in clipboard" } });
+    return;
+  }
+
+  const importedAction: TextToActionAction = isValidJSON(dataStr);
+  if (!importedAction) {
+    openSnackbar({ props: { color: "warning", text: "Invalid action data in clipboard" } });
+    return;
+  }
+
+  // Clear id to create new action
+  importedAction.id = undefined;
+
+  openActionDialog(importedAction);
 };
 
 onMounted(async () => {
@@ -158,9 +180,27 @@ onMounted(async () => {
       <v-col cols="12" class="d-flex align-center justify-space-between">
         <h2>Actions</h2>
         <div class="d-flex align-center ga-2">
-          <v-btn prepend-icon="mdi-plus" variant="outlined" @click="openActionDialog" :loading="!!isLoading">
-            New Action
-          </v-btn>
+          <v-menu>
+            <template v-slot:activator="{ props }">
+              <v-btn variant="outlined" append-icon="mdi-chevron-down" v-bind="props" :loading="!!isLoading">
+                Add New
+              </v-btn>
+            </template>
+            <v-list>
+              <v-list-item @click="openActionDialog()">
+                <template v-slot:prepend>
+                  <v-icon>mdi-plus</v-icon>
+                </template>
+                <v-list-item-title>New Action</v-list-item-title>
+              </v-list-item>
+              <v-list-item @click="importNewAction">
+                <template v-slot:prepend>
+                  <v-icon>mdi-upload</v-icon>
+                </template>
+                <v-list-item-title>Import Action</v-list-item-title>
+              </v-list-item>
+            </v-list>
+          </v-menu>
         </div>
       </v-col>
       <v-col cols="12">

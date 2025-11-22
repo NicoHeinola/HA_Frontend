@@ -42,6 +42,15 @@ const openEditDialog = async () => {
   action.value = editedAction;
 };
 
+const exportAction = async () => {
+  // Copy data to clipboard
+  const dataStr = JSON.stringify(action.value, null, 2);
+
+  await navigator.clipboard.writeText(dataStr);
+
+  openSnackbar({ props: { text: "Action data copied to clipboard" } });
+};
+
 const deleteAction = async () => {
   const ok = await openConfirm({
     props: {
@@ -78,15 +87,33 @@ const deleteAction = async () => {
       </p>
       <div class="d-flex align-center ga-2">
         <v-btn variant="text" icon="mdi-pencil" size="x-small" @click="openEditDialog" :loading="loading"> </v-btn>
-        <v-btn
-          color="error"
-          variant="text"
-          icon="mdi-trash-can"
-          size="x-small"
-          @click="deleteAction"
-          :loading="loading"
-        >
-        </v-btn>
+        <v-menu>
+          <template v-slot:activator="{ props }">
+            <v-btn
+              color="white"
+              variant="text"
+              icon="mdi-dots-vertical"
+              size="x-small"
+              v-bind="props"
+              :loading="loading"
+            >
+            </v-btn>
+          </template>
+          <v-list>
+            <v-list-item @click="exportAction">
+              <template v-slot:prepend>
+                <v-icon>mdi-download</v-icon>
+              </template>
+              <v-list-item-title>Export</v-list-item-title>
+            </v-list-item>
+            <v-list-item @click="deleteAction">
+              <template v-slot:prepend>
+                <v-icon color="error">mdi-trash-can</v-icon>
+              </template>
+              <v-list-item-title>Delete</v-list-item-title>
+            </v-list-item>
+          </v-list>
+        </v-menu>
       </div>
     </v-card-title>
     <v-card-text style="flex: 1 1 auto; display: flex; flex-direction: column; min-height: 0">
