@@ -22,8 +22,10 @@ const updateSettingValue = (settings: any[], key: string, value: string) => {
   setting.value = value;
 };
 
-onMounted(() => {
-  isValid.value = formRef.value?.validate() ?? true;
+onMounted(async () => {
+  const isFormValid = (await formRef.value?.validate()) ?? true;
+
+  isValid.value = isFormValid.valid;
 });
 </script>
 

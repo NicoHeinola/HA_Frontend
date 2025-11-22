@@ -5,6 +5,7 @@ import { TextToActionSettingService } from "@/services/text-to-action/TextToActi
 import { useSnackbar } from "@/components/use-snackbar/useSnackbar";
 import { useErrorSnackbar } from "@/utils/errorSnackbar";
 import { useConfirm } from "@/components/use-dialog/confirm/useConfirm";
+import { usePrompt } from "@/components/use-dialog/prompt/usePrompt";
 import type TextToActionAction from "@/models/text-to-action/TextToActionAction";
 import { useDialog } from "@/components/use-dialog/useDialog";
 import TextToActionActionDialog from "@/components/text-to-action/action-dialog/TextToActionActionDialog.vue";
@@ -20,6 +21,7 @@ const areTTASettingsValid = ref<boolean>(true);
 const { errorSnackbar } = useErrorSnackbar();
 const openSnackbar = useSnackbar();
 const openConfirm = useConfirm();
+const { openPrompt } = usePrompt();
 const openDialog = useDialog();
 
 const getTextToActionSettings = async () => {
@@ -110,15 +112,22 @@ const openActionDialog = async (action?: TextToActionAction) => {
 };
 
 const importNewAction = async () => {
-  const dataStr = await navigator.clipboard.readText();
+  const dataStr = await openPrompt({
+    props: {
+      title: "Import Action",
+      text: "Paste the action JSON data:",
+      label: "Action JSON",
+      inputType: "textarea",
+    },
+  });
+
   if (!dataStr) {
-    openSnackbar({ props: { color: "warning", text: "No data found in clipboard" } });
     return;
   }
 
   const importedAction: TextToActionAction = isValidJSON(dataStr);
   if (!importedAction) {
-    openSnackbar({ props: { color: "warning", text: "Invalid action data in clipboard" } });
+    openSnackbar({ props: { color: "warning", text: "Invalid action data format" } });
     return;
   }
 

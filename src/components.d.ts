@@ -16,6 +16,7 @@ declare module 'vue' {
     ConfirmDialog: typeof import('./components/use-dialog/confirm/ConfirmDialog.vue')['default']
     DialogProvider: typeof import('./components/use-dialog/DialogProvider.vue')['default']
     NavigationBar: typeof import('./components/navigation/NavigationBar.vue')['default']
+    PromptDialog: typeof import('./components/use-dialog/prompt/PromptDialog.vue')['default']
     RouterLink: typeof import('vue-router')['RouterLink']
     RouterView: typeof import('vue-router')['RouterView']
     SnackbarProvider: typeof import('./components/use-snackbar/SnackbarProvider.vue')['default']
