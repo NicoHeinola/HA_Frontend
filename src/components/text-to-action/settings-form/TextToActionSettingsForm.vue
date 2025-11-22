@@ -1,12 +1,16 @@
 <script lang="ts" setup>
 import { defineModel, defineProps } from "vue";
 import TextLabel from "@/components/text-label/TextLabel.vue";
+import { rules } from "./rules";
 
 const props = defineProps<{
   isLoading?: boolean;
 }>();
 
 const settings = defineModel<any[]>({ required: true });
+const isValid = defineModel<boolean>("isValid", { required: false, default: true });
+const allRules = rules();
+const formRef = ref();
 
 const findSettingByKey = (settings: any[], key: string) => {
   return settings.find((s) => s.key === key);
@@ -17,11 +21,24 @@ const updateSettingValue = (settings: any[], key: string, value: string) => {
   if (!setting) return;
   setting.value = value;
 };
+
+onMounted(() => {
+  isValid.value = formRef.value?.validate() ?? true;
+});
 </script>
 
 <template>
-  <v-form>
+  <v-form ref="formRef" v-model="isValid">
     <v-row>
+      <v-col cols="12">
+        <v-number-input
+          :model-value="Number(findSettingByKey(settings, 'prediction_timeout')?.value)"
+          :loading="props.isLoading"
+          label="Prediction Timeout (seconds)"
+          @update:model-value="(update) => updateSettingValue(settings, 'prediction_timeout', String(update))"
+          :rules="allRules['prediction_timeout']"
+        ></v-number-input>
+      </v-col>
       <v-col cols="12" class="pb-0">
         <text-label class="text-grey d-flex ga-1">
           <span> Keywords: </span>

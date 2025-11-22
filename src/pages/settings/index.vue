@@ -13,8 +13,9 @@ import { TextToActionActionService } from "@/services/text-to-action/TextToActio
 const textToActionSettings = ref<TextToActionSetting[]>([]);
 const textToActionActions = ref<TextToActionAction[]>([]);
 
-const isLoading = ref(false);
-const isSeeding = ref(false);
+const isLoading = ref<boolean>(false);
+const isSeeding = ref<boolean>(false);
+const areTTASettingsValid = ref<boolean>(true);
 const { errorSnackbar } = useErrorSnackbar();
 const openSnackbar = useSnackbar();
 const openConfirm = useConfirm();
@@ -135,11 +136,22 @@ onMounted(async () => {
       </v-col>
 
       <v-col cols="12">
-        <text-to-action-settings-form v-model="textToActionSettings" :isLoading="isSeeding || isLoading" />
+        <text-to-action-settings-form
+          v-model:is-valid="areTTASettingsValid"
+          v-model="textToActionSettings"
+          :isLoading="isSeeding || isLoading"
+        />
       </v-col>
 
       <v-col cols="12" class="d-flex align-center justify-end">
-        <v-btn color="success" @click="saveTextToActionSettings" :loading="!!isLoading"> Save </v-btn>
+        <v-btn
+          color="success"
+          @click="saveTextToActionSettings"
+          :loading="!!isLoading"
+          :disabled="!areTTASettingsValid"
+        >
+          Save
+        </v-btn>
       </v-col>
     </v-row>
     <v-row>

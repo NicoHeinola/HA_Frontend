@@ -53,6 +53,12 @@ export default createVuetify({
       density: "compact",
       hideDetails: "auto",
     },
+    VNumberInput: {
+      variant: "outlined",
+      color: "secondary",
+      density: "compact",
+      hideDetails: "auto",
+    },
     VTextField: {
       variant: "outlined",
       color: "secondary",
