@@ -62,9 +62,7 @@ const importNewAction = async () => {
       <div class="d-flex align-center ga-2">
         <v-menu>
           <template #activator="{ props }">
-            <v-btn append-icon="mdi-chevron-down" v-bind="props" :loading="!!isLoadingTTASettings" variant="outlined">
-              Add New
-            </v-btn>
+            <v-btn append-icon="mdi-chevron-down" v-bind="props" :loading="!!isLoadingTTASettings"> Add New </v-btn>
           </template>
           <v-list>
             <v-list-item @click="openActionDialog()">
