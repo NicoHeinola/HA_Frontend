@@ -1,8 +1,6 @@
 <script lang="ts" setup>
-import { computed, ref, watch } from "vue";
+import { computed, ref } from "vue";
 import { useRoute } from "vue-router";
-import { useTheme } from "vuetify";
-import { useThemeStore } from "@/stores/themeStore";
 import ThemePicker from "./ThemePicker.vue";
 
 const links = ref([
