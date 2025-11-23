@@ -1,13 +1,18 @@
 <script lang="ts" setup>
-import { ref } from "vue";
+import { computed, ref } from "vue";
 import TtaCachedModelsTable from "@/components/text-to-action/tta-cached-models-table/TtaCachedModelsTable.vue";
 import { useConfirm } from "@/components/use-dialog/confirm/useConfirm";
 import { useSnackbar } from "@/components/use-snackbar/useSnackbar";
 import { TextToActionCachedModelService } from "@/services/text-to-action/TextToActionCachedModel.service";
 import { useSettingStore } from "@/stores/settingStore";
 import { useErrorSnackbar } from "@/utils/errorSnackbar";
+import { findSettingByKey } from "@/utils/settingsHelpers";
 
 const settingStore = useSettingStore();
+
+const defaultModel = computed(() => {
+  return findSettingByKey(settingStore.ttaSettings, "default_model")?.value;
+});
 
 const isLoadingCachedModels = ref<boolean>(false);
 const { errorSnackbar } = useErrorSnackbar();
@@ -102,6 +107,10 @@ const deleteCachedModels = async () => {
               :disabled="settingStore.cachedModels.includes(model)"
               @click="cacheModel(model)"
             >
+              <template #prepend>
+                <v-icon v-if="model === defaultModel" size="small" color="secondary">mdi-star</v-icon>
+                <v-icon v-else size="small" class="opacity-0">mdi-star</v-icon>
+              </template>
               <v-list-item-title>{{ model }}</v-list-item-title>
             </v-list-item>
             <v-list-item v-if="settingStore.availableModels.length === 0" disabled>
