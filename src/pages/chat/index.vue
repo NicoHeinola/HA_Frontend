@@ -8,7 +8,7 @@ import { useErrorSnackbar } from "@/utils/errorSnackbar";
 
 const settingStore = useSettingStore();
 
-const pickedModel = ref<string>("");
+const selectedModel = ref<string>("");
 const chatMessage = ref<string>("");
 
 const sentChatMessages = ref<string[]>([]);
@@ -58,7 +58,7 @@ const onEnter = async (event: KeyboardEvent) => {
 
   try {
     const response = await TextToActionService().textToAction(chatMessage.value, {
-      model: pickedModel.value,
+      model: selectedModel.value,
     });
 
     aiResponses.value.push(response);
@@ -114,7 +114,7 @@ onMounted(async () => {
   // Set initial picked model from store
   if (settingStore.availableModels.length > 0) {
     const defaultModel = settingStore.ttaSettings.find((s) => s.key === "default_model")?.value as string;
-    pickedModel.value = defaultModel || settingStore.availableModels.at(-1) || "";
+    selectedModel.value = defaultModel || settingStore.availableModels.at(-1) || "";
   }
 });
 </script>
@@ -203,9 +203,9 @@ onMounted(async () => {
                   <v-list-item
                     v-for="(model, index) in settingStore.availableModels"
                     :key="index"
-                    :active="pickedModel === model"
+                    :active="selectedModel === model"
                     :value="model"
-                    @click="pickedModel = model"
+                    @click="selectedModel = model"
                   >
                     <v-list-item-title>{{ model }}</v-list-item-title>
                   </v-list-item>
@@ -225,7 +225,7 @@ onMounted(async () => {
         </v-textarea>
       </v-col>
       <v-col class="pt-0 d-flex justify-space-between align-center" cols="12">
-        <text-label class="text-grey-darken-3">Picked model: {{ pickedModel }}</text-label>
+        <text-label class="text-grey-darken-3">Selected model: {{ selectedModel }}</text-label>
       </v-col>
     </v-row>
 
