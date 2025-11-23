@@ -36,6 +36,9 @@ const aiResponseAction = computed(() => {
   const isValidAction = settingStore.ttaActions.find((a) => a.name === action);
   if (!isValidAction) return null;
 
+  const blacklistedActions = ["do_nothing", "ask_question", "answer_question"];
+  if (blacklistedActions.includes(action)) return null;
+
   return action;
 });
 
