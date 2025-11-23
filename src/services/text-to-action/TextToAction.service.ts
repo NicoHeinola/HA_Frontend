@@ -10,7 +10,7 @@ export const TextToActionService = () => {
         model_type: "gguf",
       },
       headers: {
-        Authorization: `Bearer ${token}`,
+        "Authorization": `Bearer ${token}`,
         "Content-Type": "application/json",
       },
     });
@@ -24,10 +24,10 @@ export const TextToActionService = () => {
       { text, ...params },
       {
         headers: {
-          Authorization: `Bearer ${token}`,
+          "Authorization": `Bearer ${token}`,
           "Content-Type": "application/json",
         },
-      }
+      },
     );
 
     return response.data;

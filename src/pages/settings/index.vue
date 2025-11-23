@@ -1,16 +1,16 @@
 <script lang="ts" setup>
-import { ref, onMounted, computed } from "vue";
-import { TextToActionSettingService } from "@/services/text-to-action/TextToActionSetting.service";
-import { useSnackbar } from "@/components/use-snackbar/useSnackbar";
-import { useErrorSnackbar } from "@/utils/errorSnackbar";
+import type TextToActionAction from "@/models/text-to-action/TextToActionAction";
+import { computed, onMounted, ref } from "vue";
+import TextToActionActionDialog from "@/components/text-to-action/action-dialog/TextToActionActionDialog.vue";
 import { useConfirm } from "@/components/use-dialog/confirm/useConfirm";
 import { usePrompt } from "@/components/use-dialog/prompt/usePrompt";
-import type TextToActionAction from "@/models/text-to-action/TextToActionAction";
 import { useDialog } from "@/components/use-dialog/useDialog";
-import TextToActionActionDialog from "@/components/text-to-action/action-dialog/TextToActionActionDialog.vue";
+import { useSnackbar } from "@/components/use-snackbar/useSnackbar";
 import { TextToActionActionService } from "@/services/text-to-action/TextToActionAction.service";
-import { isValidJSON } from "@/utils/jsonText";
+import { TextToActionSettingService } from "@/services/text-to-action/TextToActionSetting.service";
 import { useSettingStore } from "@/stores/settingStore";
+import { useErrorSnackbar } from "@/utils/errorSnackbar";
+import { isValidJSON } from "@/utils/jsonText";
 
 const settingStore = useSettingStore();
 const textToActionActions = ref<TextToActionAction[]>([]);
@@ -26,7 +26,7 @@ const openDialog = useDialog();
 
 const textToActionSettings = computed({
   get: () => settingStore.settings,
-  set: (value) => {
+  set: value => {
     settingStore.settings = value;
   },
 });
@@ -141,20 +141,20 @@ onMounted(async () => {
 <template>
   <v-container class="pa-12">
     <v-row>
-      <v-col cols="12" class="d-flex align-center justify-space-between">
+      <v-col class="d-flex align-center justify-space-between" cols="12">
         <h1>TTA Settings</h1>
       </v-col>
     </v-row>
     <v-row>
-      <v-col cols="12" class="d-flex align-center justify-space-between">
+      <v-col class="d-flex align-center justify-space-between" cols="12">
         <h2>General</h2>
         <div class="d-flex align-center ga-2">
           <v-btn
             color="error"
+            :loading="!!isLoading"
             prepend-icon="mdi-seed"
             variant="outlined"
             @click="seedTextToActionSettings"
-            :loading="!!isLoading"
           >
             Seed
           </v-btn>
@@ -163,42 +163,42 @@ onMounted(async () => {
 
       <v-col cols="12">
         <text-to-action-settings-form
-          v-model:is-valid="areTTASettingsValid"
           v-model="textToActionSettings"
-          :isLoading="isSeeding || isLoading"
+          v-model:is-valid="areTTASettingsValid"
+          :is-loading="isSeeding || isLoading"
         />
       </v-col>
 
-      <v-col cols="12" class="d-flex align-center justify-end">
+      <v-col class="d-flex align-center justify-end" cols="12">
         <v-btn
           color="success"
-          @click="saveTextToActionSettings"
-          :loading="!!isLoading"
           :disabled="!areTTASettingsValid"
+          :loading="!!isLoading"
+          @click="saveTextToActionSettings"
         >
           Save
         </v-btn>
       </v-col>
     </v-row>
     <v-row>
-      <v-col cols="12" class="d-flex align-center justify-space-between">
+      <v-col class="d-flex align-center justify-space-between" cols="12">
         <h2>Actions</h2>
         <div class="d-flex align-center ga-2">
           <v-menu>
-            <template v-slot:activator="{ props }">
-              <v-btn variant="outlined" append-icon="mdi-chevron-down" v-bind="props" :loading="!!isLoading">
+            <template #activator="{ props }">
+              <v-btn append-icon="mdi-chevron-down" v-bind="props" :loading="!!isLoading" variant="outlined">
                 Add New
               </v-btn>
             </template>
             <v-list>
               <v-list-item @click="openActionDialog()">
-                <template v-slot:prepend>
+                <template #prepend>
                   <v-icon>mdi-plus</v-icon>
                 </template>
                 <v-list-item-title>New Action</v-list-item-title>
               </v-list-item>
               <v-list-item @click="importNewAction">
-                <template v-slot:prepend>
+                <template #prepend>
                   <v-icon>mdi-upload</v-icon>
                 </template>
                 <v-list-item-title>Import Action</v-list-item-title>
@@ -210,17 +210,17 @@ onMounted(async () => {
       <v-col cols="12">
         <v-row>
           <v-col
+            v-for="(action, i) in textToActionActions"
+            :key="action.id"
+            class="mb-4"
             cols="6"
             lg="4"
             xl="3"
             xxl="2"
-            v-for="(action, i) in textToActionActions"
-            :key="action.id"
-            class="mb-4"
           >
             <text-to-action-actions-card
-              @delete="getTextToActionActions"
               v-model="(textToActionActions[i] as TextToActionAction)"
+              @delete="getTextToActionActions"
             />
           </v-col>
         </v-row>

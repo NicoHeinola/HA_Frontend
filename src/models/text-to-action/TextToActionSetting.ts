@@ -3,8 +3,8 @@ export enum TextToActionSettingType {
 }
 
 export default interface TextToActionSetting {
-  id?: number;
-  key: string;
-  value: string;
-  type: TextToActionSettingType | string;
+  id?: number
+  key: string
+  value: string
+  type: TextToActionSettingType | string
 }

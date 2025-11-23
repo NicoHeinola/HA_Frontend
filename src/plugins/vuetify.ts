@@ -4,15 +4,15 @@
  * Framework documentation: https://vuetifyjs.com`
  */
 
-// Styles
-//@ts-ignore
-import "@mdi/font/css/materialdesignicons.css";
-
-//@ts-ignore
-import "vuetify/styles";
-
 // Composables
 import { createVuetify } from "vuetify";
+
+// Styles
+// @ts-ignore
+import "@mdi/font/css/materialdesignicons.css";
+
+// @ts-ignore
+import "vuetify/styles";
 
 // https://vuetifyjs.com/en/introduction/why-vuetify/#feature-guides
 export default createVuetify({

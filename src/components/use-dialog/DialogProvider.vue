@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { ref, provide, markRaw } from "vue";
+import { markRaw, provide, ref } from "vue";
 
 const isOpen = ref(false);
 const dialogComponent = ref<any>(null);
@@ -11,7 +11,7 @@ const openDialog = ({ component, props }: any) => {
   dialogProps.value = props || {};
   isOpen.value = true;
 
-  return new Promise((resolve) => {
+  return new Promise(resolve => {
     resolvePromise = resolve;
   });
 };
@@ -32,7 +32,7 @@ provide("openDialog", openDialog);
 </script>
 
 <template>
-  <slot></slot>
+  <slot />
   <v-dialog v-model="isOpen">
     <component :is="dialogComponent" v-bind="dialogProps" @close="handleClose" @resolve="handleResolve" />
   </v-dialog>

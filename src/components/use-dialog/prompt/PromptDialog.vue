@@ -4,21 +4,21 @@ import { VTextarea, VTextField } from "vuetify/components";
 
 const props = withDefaults(
   defineProps<{
-    title?: string;
-    text?: string;
-    label?: string;
-    inputType?: string;
+    title?: string
+    text?: string
+    label?: string
+    inputType?: string
   }>(),
   {
     title: "Enter text",
     text: "",
     label: "Input",
     inputType: "text",
-  }
+  },
 );
 
 const emit = defineEmits<{
-  (e: "resolve", payload: string | null): void;
+  (e: "resolve", payload: string | null): void
 }>();
 
 const inputValue = ref<string>("");
@@ -44,8 +44,8 @@ const handleCancel = () => {
       <component :is="inputComponent" v-model="inputValue" :label="label" @keyup.enter="handleConfirm" />
     </v-card-text>
     <v-card-actions class="d-flex justify-end">
-      <v-btn variant="outlined" color="error" @click="handleCancel">Cancel</v-btn>
-      <v-btn variant="elevated" color="success" @click="handleConfirm">OK</v-btn>
+      <v-btn color="error" variant="outlined" @click="handleCancel">Cancel</v-btn>
+      <v-btn color="success" variant="elevated" @click="handleConfirm">OK</v-btn>
     </v-card-actions>
   </v-card>
 </template>

@@ -7,7 +7,7 @@ const api = axios.create({
   headers: {
     "Content-Type": "application/json",
   },
-  paramsSerializer: (params) => {
+  paramsSerializer: params => {
     return qs.stringify(params, { arrayFormat: "brackets" });
   },
 });
@@ -18,10 +18,10 @@ const basicAPI = axios.create({
   headers: {
     "Content-Type": "application/json",
   },
-  paramsSerializer: (params) => {
+  paramsSerializer: params => {
     return qs.stringify(params, { arrayFormat: "brackets" });
   },
 });
 
 export default api;
-export { basicAPI, api };
+export { api, basicAPI };

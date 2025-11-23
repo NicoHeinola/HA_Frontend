@@ -13,10 +13,10 @@ export const BackendService = () => {
       },
       {
         headers: {
-          Authorization: `Bearer ${token}`,
+          "Authorization": `Bearer ${token}`,
           "Content-Type": "application/json",
         },
-      }
+      },
     );
 
     return response.data;
@@ -28,10 +28,10 @@ export const BackendService = () => {
       { ai_answer: aiAnswer },
       {
         headers: {
-          Authorization: `Bearer ${token}`,
+          "Authorization": `Bearer ${token}`,
           "Content-Type": "application/json",
         },
-      }
+      },
     );
 
     return response.data;

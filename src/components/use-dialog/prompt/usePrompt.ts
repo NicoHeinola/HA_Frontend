@@ -1,7 +1,7 @@
-import { useDialog } from "@/components/use-dialog/useDialog";
 import PromptDialog from "@/components/use-dialog/prompt/PromptDialog.vue";
+import { useDialog } from "@/components/use-dialog/useDialog";
 
-export function usePrompt() {
+export function usePrompt () {
   const openDialog = useDialog();
 
   const openPrompt = async (options?: any): Promise<string | null> => {

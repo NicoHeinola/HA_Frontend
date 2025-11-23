@@ -1,14 +1,14 @@
 <script lang="ts" setup>
-import { useDialog } from "@/components/use-dialog/useDialog";
 import type TextToActionAction from "@/models/text-to-action/TextToActionAction";
-import TextToActionActionDialog from "../action-dialog/TextToActionActionDialog.vue";
+import { useConfirm } from "@/components/use-dialog/confirm/useConfirm";
+import { useDialog } from "@/components/use-dialog/useDialog";
+import { useSnackbar } from "@/components/use-snackbar/useSnackbar";
 import { TextToActionActionService } from "@/services/text-to-action/TextToActionAction.service";
 import { useErrorSnackbar } from "@/utils/errorSnackbar";
-import { useSnackbar } from "@/components/use-snackbar/useSnackbar";
-import { useConfirm } from "@/components/use-dialog/confirm/useConfirm";
+import TextToActionActionDialog from "../action-dialog/TextToActionActionDialog.vue";
 
 const emit = defineEmits<{
-  (e: "delete", payload: TextToActionAction): void;
+  (e: "delete", payload: TextToActionAction): void
 }>();
 
 const action = defineModel<TextToActionAction>({ required: true });
@@ -80,34 +80,39 @@ const deleteAction = async () => {
 </script>
 
 <template>
-  <v-card height="300px" class="d-flex flex-column">
+  <v-card class="d-flex flex-column" height="300px">
     <v-card-title class="d-flex justify-space-between align-center">
       <p class="text-truncate">
         {{ action.name || "Unnamed Action" }}
       </p>
       <div class="d-flex align-center ga-2">
-        <v-btn variant="text" icon="mdi-pencil" size="x-small" @click="openEditDialog" :loading="loading"> </v-btn>
+        <v-btn
+          icon="mdi-pencil"
+          :loading="loading"
+          size="x-small"
+          variant="text"
+          @click="openEditDialog"
+        />
         <v-menu>
-          <template v-slot:activator="{ props }">
+          <template #activator="{ props }">
             <v-btn
               color="white"
-              variant="text"
               icon="mdi-dots-vertical"
-              size="x-small"
               v-bind="props"
               :loading="loading"
-            >
-            </v-btn>
+              size="x-small"
+              variant="text"
+            />
           </template>
           <v-list>
             <v-list-item @click="exportAction">
-              <template v-slot:prepend>
+              <template #prepend>
                 <v-icon>mdi-download</v-icon>
               </template>
               <v-list-item-title>Export</v-list-item-title>
             </v-list-item>
             <v-list-item @click="deleteAction">
-              <template v-slot:prepend>
+              <template #prepend>
                 <v-icon color="error">mdi-trash-can</v-icon>
               </template>
               <v-list-item-title>Delete</v-list-item-title>
@@ -117,13 +122,13 @@ const deleteAction = async () => {
       </div>
     </v-card-title>
     <v-card-text style="flex: 1 1 auto; display: flex; flex-direction: column; min-height: 0">
-      <div style="flex: 1 1 auto; min-height: 0; overflow: auto" class="mb-5">
+      <div class="mb-5" style="flex: 1 1 auto; min-height: 0; overflow: auto">
         <p>
           {{ getShortenedText(action.description || "No description", 300) }}
-          <v-tooltip :text="getShortenedText(action.description, 500)" activator="parent"></v-tooltip>
+          <v-tooltip activator="parent" :text="getShortenedText(action.description, 500)" />
         </p>
       </div>
-      <div style="flex: 0 0 150px; height: 150px; min-height: 150px; max-height: 150px" v-if="action.meta">
+      <div v-if="action.meta" style="flex: 0 0 150px; height: 150px; min-height: 150px; max-height: 150px">
         <code-block class="h-100">{{ action.meta }}</code-block>
       </div>
     </v-card-text>

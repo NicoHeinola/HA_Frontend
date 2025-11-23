@@ -14,7 +14,7 @@ const handleTabKey = (event: KeyboardEvent) => {
     const start = textarea.selectionStart;
     const end = textarea.selectionEnd;
     const value = textarea.value;
-    textarea.value = value.substring(0, start) + "\t" + value.substring(end);
+    textarea.value = value.slice(0, Math.max(0, start)) + "\t" + value.slice(Math.max(0, end));
     textarea.selectionStart = textarea.selectionEnd = start + 1;
 
     // Update v-model
@@ -24,5 +24,5 @@ const handleTabKey = (event: KeyboardEvent) => {
 </script>
 
 <template>
-  <v-textarea ref="inputRef" v-model="model" @keydown="handleTabKey" v-bind="$attrs" />
+  <v-textarea ref="inputRef" v-model="model" v-bind="$attrs" @keydown="handleTabKey" />
 </template>

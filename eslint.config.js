@@ -11,6 +11,7 @@ export default vuetify(
       "antfu/top-level-function": "off",
       "func-style": ["error", "declaration", { allowArrowFunctions: true }],
       "vue/script-indent": "off",
+      "semi": "off",
     },
   },
 );

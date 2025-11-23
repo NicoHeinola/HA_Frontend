@@ -4,7 +4,7 @@ const slots = useSlots();
 const formattedSlotText = computed(() => {
   const slot: VNode[] = slots.default ? slots.default() : [];
   const slotText = slot
-    .map((vnode) => {
+    .map(vnode => {
       if (typeof vnode.children === "string") {
         return vnode.children;
       }

@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { ref, provide } from "vue";
+import { provide, ref } from "vue";
 
 const isOpen = ref(false);
 const snackbarProps = ref<Record<string, any>>({});
@@ -9,7 +9,7 @@ const openSnackbar = ({ props }: any) => {
   snackbarProps.value = props || {};
   isOpen.value = true;
 
-  return new Promise((resolve) => {
+  return new Promise(resolve => {
     resolvePromise = resolve;
   });
 };
@@ -23,8 +23,14 @@ provide("openSnackbar", openSnackbar);
 </script>
 
 <template>
-  <slot></slot>
-  <v-snackbar color="success" v-model="isOpen" v-bind="snackbarProps" :timeout="5000" @update:model-value="handleClose">
+  <slot />
+  <v-snackbar
+    v-model="isOpen"
+    color="success"
+    v-bind="snackbarProps"
+    :timeout="5000"
+    @update:model-value="handleClose"
+  >
     <template #actions>
       <v-btn color="white" text @click="isOpen = false">OK</v-btn>
     </template>
