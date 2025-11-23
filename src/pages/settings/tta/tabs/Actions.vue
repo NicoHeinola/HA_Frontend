@@ -19,7 +19,7 @@ const openActionDialog = async (action?: TextToActionAction) => {
   const saved = await openDialog({
     component: TextToActionActionDialog,
     props: {
-      action: action ? structuredClone(action) : undefined,
+      action: action ? JSON.parse(JSON.stringify(action)) : undefined,
     },
   });
 

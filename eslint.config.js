@@ -13,7 +13,9 @@ export default vuetify(
       "func-style": ["error", "declaration", { allowArrowFunctions: true }],
       "vue/script-indent": "off",
       "vue/attributes-order": "off",
+      "vue/max-attributes-per-line": "off",
       "semi": "off",
+      "unicorn/prefer-structured-clone": "off",
       "@stylistic/member-delimiter-style": [
         "error",
         {

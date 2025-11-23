@@ -33,7 +33,7 @@ const openEditDialog = async () => {
   const editedAction = await openDialog({
     component: TextToActionActionDialog,
     props: {
-      action: structuredClone(action.value),
+      action: JSON.parse(JSON.stringify(action.value)),
     },
   });
 
@@ -86,17 +86,11 @@ const deleteAction = async () => {
         {{ action.name || "Unnamed Action" }}
       </p>
       <div class="d-flex align-center ga-2">
-        <v-btn
-          icon="mdi-pencil"
-          :loading="loading"
-          size="x-small"
-          variant="text"
-          @click="openEditDialog"
-        />
+        <v-btn icon="mdi-pencil" :loading="loading" size="x-small" variant="text" @click="openEditDialog" />
         <v-menu>
           <template #activator="{ props }">
             <v-btn
-              color="white"
+              color="text"
               icon="mdi-dots-vertical"
               v-bind="props"
               :loading="loading"

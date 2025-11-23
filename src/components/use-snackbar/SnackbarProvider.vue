@@ -9,7 +9,7 @@ const openSnackbar = ({ props }: any) => {
   snackbarProps.value = props || {};
   isOpen.value = true;
 
-  return new Promise(resolve => {
+  return new Promise((resolve) => {
     resolvePromise = resolve;
   });
 };
@@ -24,15 +24,9 @@ provide("openSnackbar", openSnackbar);
 
 <template>
   <slot />
-  <v-snackbar
-    v-model="isOpen"
-    color="success"
-    v-bind="snackbarProps"
-    :timeout="5000"
-    @update:model-value="handleClose"
-  >
+  <v-snackbar v-model="isOpen" color="success" v-bind="snackbarProps" :timeout="5000" @update:model-value="handleClose">
     <template #actions>
-      <v-btn color="white" text @click="isOpen = false">OK</v-btn>
+      <v-btn text @click="isOpen = false" color="text">OK</v-btn>
     </template>
   </v-snackbar>
 </template>
