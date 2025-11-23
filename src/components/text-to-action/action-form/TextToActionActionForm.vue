@@ -5,7 +5,7 @@ import { JSONTextToObject, objectToJSONString } from "@/utils/jsonText";
 import { rules } from "./rules";
 
 const props = defineProps<{
-  isLoading?: boolean
+  isLoading?: boolean;
 }>();
 
 const allRules = rules();

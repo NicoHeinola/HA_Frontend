@@ -4,10 +4,10 @@ import { VTextarea, VTextField } from "vuetify/components";
 
 const props = withDefaults(
   defineProps<{
-    title?: string
-    text?: string
-    label?: string
-    inputType?: string
+    title?: string;
+    text?: string;
+    label?: string;
+    inputType?: string;
   }>(),
   {
     title: "Enter text",
@@ -18,7 +18,7 @@ const props = withDefaults(
 );
 
 const emit = defineEmits<{
-  (e: "resolve", payload: string | null): void
+  (e: "resolve", payload: string | null): void;
 }>();
 
 const inputValue = ref<string>("");

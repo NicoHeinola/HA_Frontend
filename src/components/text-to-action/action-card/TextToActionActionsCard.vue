@@ -8,7 +8,7 @@ import { useErrorSnackbar } from "@/utils/errorSnackbar";
 import TextToActionActionDialog from "../action-dialog/TextToActionActionDialog.vue";
 
 const emit = defineEmits<{
-  (e: "delete", payload: TextToActionAction): void
+  (e: "delete", payload: TextToActionAction): void;
 }>();
 
 const action = defineModel<TextToActionAction>({ required: true });

@@ -1,8 +1,8 @@
 import { inject } from "vue";
 
 type DialogOptions = {
-  component: any // The component to be rendered in the dialog
-  props?: Record<string, any>
+  component: any; // The component to be rendered in the dialog
+  props?: Record<string, any>;
 };
 
 type OpenDialogFn = (options: DialogOptions) => Promise<any>;

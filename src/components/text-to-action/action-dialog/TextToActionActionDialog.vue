@@ -5,11 +5,11 @@ import { TextToActionActionService } from "@/services/text-to-action/TextToActio
 import { useErrorSnackbar } from "@/utils/errorSnackbar";
 
 const props = defineProps<{
-  action?: TextToActionAction
+  action?: TextToActionAction;
 }>();
 
 const emit = defineEmits<{
-  (e: "resolve", payload: TextToActionAction | false): void
+  (e: "resolve", payload: TextToActionAction | false): void;
 }>();
 
 const action = ref<TextToActionAction>(

@@ -1,8 +1,8 @@
 <script lang="ts" setup>
 withDefaults(
   defineProps<{
-    title?: string
-    text?: string
+    title?: string;
+    text?: string;
   }>(),
   {
     title: "Are you sure?",
@@ -11,7 +11,7 @@ withDefaults(
 );
 
 const emit = defineEmits<{
-  (e: "resolve", payload: boolean): void
+  (e: "resolve", payload: boolean): void;
 }>();
 </script>
 

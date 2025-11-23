@@ -1,7 +1,7 @@
 import { inject } from "vue";
 
 type SnackbarOptions = {
-  props?: Record<string, any>
+  props?: Record<string, any>;
 };
 
 type OpenSnackbarFn = (options: SnackbarOptions) => Promise<any>;
