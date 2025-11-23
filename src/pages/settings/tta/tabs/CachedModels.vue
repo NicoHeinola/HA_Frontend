@@ -17,8 +17,8 @@ const openConfirm = useConfirm();
 const deleteCachedModel = async (modelName: string) => {
   const ok = await openConfirm({
     props: {
-      title: "Delete Cached Model",
-      text: `Are you sure you want to delete the cached model "${modelName}"?`,
+      title: "Remove from Cache",
+      text: `Are you sure you want to remove "${modelName}" from cache?`,
     },
   });
 
@@ -28,7 +28,7 @@ const deleteCachedModel = async (modelName: string) => {
 
   try {
     await TextToActionCachedModelService().deleteCachedModel(modelName);
-    openSnackbar({ props: { text: `Cached model "${modelName}" deleted` } });
+    openSnackbar({ props: { text: `"${modelName}" removed from cache` } });
     await settingStore.loadCachedModels();
   } catch (error) {
     errorSnackbar(error, openSnackbar);
@@ -63,8 +63,8 @@ const cacheModel = async (modelName: string) => {
 const deleteCachedModels = async () => {
   const ok = await openConfirm({
     props: {
-      title: "Delete All Cached Models",
-      text: "Are you sure you want to delete all cached models? This action cannot be undone.",
+      title: "Clear Cache",
+      text: "Are you sure you want to remove all models from cache?",
     },
   });
 
@@ -74,7 +74,7 @@ const deleteCachedModels = async () => {
 
   try {
     await TextToActionCachedModelService().deleteCachedModels();
-    openSnackbar({ props: { text: "All cached models deleted" } });
+    openSnackbar({ props: { text: "All models removed from cache" } });
     await settingStore.loadCachedModels();
   } catch (error) {
     errorSnackbar(error, openSnackbar);
@@ -117,7 +117,7 @@ const deleteCachedModels = async () => {
             </v-btn>
           </template>
           <v-list>
-            <v-list-item @click="deleteCachedModels" title="Delete All">
+            <v-list-item @click="deleteCachedModels" title="Clear cache">
               <template #prepend>
                 <v-icon size="small" color="error">mdi-trash-can</v-icon>
               </template>
