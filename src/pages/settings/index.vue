@@ -6,16 +6,14 @@ import { useConfirm } from "@/components/use-dialog/confirm/useConfirm";
 import { usePrompt } from "@/components/use-dialog/prompt/usePrompt";
 import { useDialog } from "@/components/use-dialog/useDialog";
 import { useSnackbar } from "@/components/use-snackbar/useSnackbar";
-import { TextToActionActionService } from "@/services/text-to-action/TextToActionAction.service";
 import { TextToActionSettingService } from "@/services/text-to-action/TextToActionSetting.service";
 import { useSettingStore } from "@/stores/settingStore";
 import { useErrorSnackbar } from "@/utils/errorSnackbar";
 import { isValidJSON } from "@/utils/jsonText";
 
 const settingStore = useSettingStore();
-const textToActionActions = ref<TextToActionAction[]>([]);
 
-const isLoading = ref<boolean>(false);
+const isLoadingTTASettings = ref<boolean>(false);
 const isSeeding = ref<boolean>(false);
 const areTTASettingsValid = ref<boolean>(true);
 const { errorSnackbar } = useErrorSnackbar();
@@ -24,23 +22,12 @@ const openConfirm = useConfirm();
 const { openPrompt } = usePrompt();
 const openDialog = useDialog();
 
-const textToActionSettings = computed({
-  get: () => settingStore.settings,
-  set: value => {
-    settingStore.settings = value;
+const ttaSettings = computed({
+  get: () => settingStore.ttaSettings,
+  set: (value) => {
+    settingStore.ttaSettings = value;
   },
 });
-
-const getTextToActionActions = async () => {
-  isLoading.value = true;
-  try {
-    textToActionActions.value = await TextToActionActionService().getActions();
-  } catch (error) {
-    errorSnackbar(error, openSnackbar);
-    textToActionActions.value = [];
-  }
-  isLoading.value = false;
-};
 
 const seedTextToActionSettings = async () => {
   const ok = await openConfirm({
@@ -57,7 +44,7 @@ const seedTextToActionSettings = async () => {
   try {
     await TextToActionSettingService().seedSettings({ replace: true });
     openSnackbar({ props: { text: "TTA Settings seeded" } });
-    await settingStore.loadSettings();
+    await settingStore.loadTTASettings();
   } catch (error) {
     errorSnackbar(error, openSnackbar);
   }
@@ -75,10 +62,10 @@ const saveTextToActionSettings = async () => {
 
   if (!ok) return;
 
-  isLoading.value = true;
+  isLoadingTTASettings.value = true;
 
   try {
-    for (const setting of textToActionSettings.value) {
+    for (const setting of ttaSettings.value) {
       if (!setting.id) continue;
 
       await TextToActionSettingService().updateSetting(setting.id, setting);
@@ -86,12 +73,12 @@ const saveTextToActionSettings = async () => {
 
     openSnackbar({ props: { text: "General TTA Settings saved" } });
 
-    await settingStore.loadSettings();
+    await settingStore.loadTTASettings();
   } catch (error) {
     errorSnackbar(error, openSnackbar);
   }
 
-  isLoading.value = false;
+  isLoadingTTASettings.value = false;
 };
 
 const openActionDialog = async (action?: TextToActionAction) => {
@@ -104,7 +91,7 @@ const openActionDialog = async (action?: TextToActionAction) => {
 
   if (!saved) return;
 
-  await getTextToActionActions();
+  await settingStore.loadTTAActions();
 };
 
 const importNewAction = async () => {
@@ -134,7 +121,7 @@ const importNewAction = async () => {
 };
 
 onMounted(async () => {
-  await getTextToActionActions();
+  await settingStore.loadTTAActions();
 });
 </script>
 
@@ -151,7 +138,7 @@ onMounted(async () => {
         <div class="d-flex align-center ga-2">
           <v-btn
             color="error"
-            :loading="!!isLoading"
+            :loading="!!isLoadingTTASettings"
             prepend-icon="mdi-seed"
             variant="outlined"
             @click="seedTextToActionSettings"
@@ -163,9 +150,9 @@ onMounted(async () => {
 
       <v-col cols="12">
         <text-to-action-settings-form
-          v-model="textToActionSettings"
+          v-model="ttaSettings"
           v-model:is-valid="areTTASettingsValid"
-          :is-loading="isSeeding || isLoading"
+          :is-loading="isSeeding || isLoadingTTASettings"
         />
       </v-col>
 
@@ -173,7 +160,7 @@ onMounted(async () => {
         <v-btn
           color="success"
           :disabled="!areTTASettingsValid"
-          :loading="!!isLoading"
+          :loading="!!isLoadingTTASettings"
           @click="saveTextToActionSettings"
         >
           Save
@@ -186,7 +173,7 @@ onMounted(async () => {
         <div class="d-flex align-center ga-2">
           <v-menu>
             <template #activator="{ props }">
-              <v-btn append-icon="mdi-chevron-down" v-bind="props" :loading="!!isLoading" variant="outlined">
+              <v-btn append-icon="mdi-chevron-down" v-bind="props" :loading="!!isLoadingTTASettings" variant="outlined">
                 Add New
               </v-btn>
             </template>
@@ -210,7 +197,7 @@ onMounted(async () => {
       <v-col cols="12">
         <v-row>
           <v-col
-            v-for="(action, i) in textToActionActions"
+            v-for="(action, i) in settingStore.ttaActions"
             :key="action.id"
             class="mb-4"
             cols="6"
@@ -219,8 +206,8 @@ onMounted(async () => {
             xxl="2"
           >
             <text-to-action-actions-card
-              v-model="(textToActionActions[i] as TextToActionAction)"
-              @delete="getTextToActionActions"
+              v-model="(settingStore.ttaActions[i] as TextToActionAction)"
+              @delete="settingStore.loadTTAActions"
             />
           </v-col>
         </v-row>

@@ -1,10 +1,8 @@
 <script lang="ts" setup>
-import type TextToActionAction from "@/models/text-to-action/TextToActionAction";
 import TextLabel from "@/components/text-label/TextLabel.vue";
 import { useSnackbar } from "@/components/use-snackbar/useSnackbar";
 import { BackendService } from "@/services/backend/TextToAction.service";
 import { TextToActionService } from "@/services/text-to-action/TextToAction.service";
-import { TextToActionActionService } from "@/services/text-to-action/TextToActionAction.service";
 import { useSettingStore } from "@/stores/settingStore";
 import { useErrorSnackbar } from "@/utils/errorSnackbar";
 
@@ -13,16 +11,11 @@ const pickedModel = ref<string>("");
 const chatMessage = ref<string>("");
 const aiResponse = ref<Record<string, any> | null>(null);
 
-// List of all valid actions that the AI can suggest
-const allActions = ref<TextToActionAction[]>([]);
-
 const isSendingMessage = ref(false);
-const isLoadingActions = ref(false);
-
 const isPlaybackEnabled = ref(false);
 
 const isLoading = computed(() => {
-  return isSendingMessage.value || isLoadingActions.value;
+  return isSendingMessage.value || settingStore.isLoadingTTAActions;
 });
 
 const openSnackbar = useSnackbar();
@@ -40,22 +33,11 @@ const aiResponseTextParts = computed(() => {
 const aiResponseAction = computed(() => {
   const action = aiResponse.value?.["action"] || null;
 
-  const isValidAction = allActions.value.find((a) => a.name === action);
+  const isValidAction = settingStore.ttaActions.find((a) => a.name === action);
   if (!isValidAction) return null;
 
   return action;
 });
-
-const getTextToActionActions = async () => {
-  isLoadingActions.value = true;
-  try {
-    allActions.value = await TextToActionActionService().getActions();
-  } catch (error) {
-    errorSnackbar(error, openSnackbar);
-    allActions.value = [];
-  }
-  isLoadingActions.value = false;
-};
 
 const onEnter = async (event: KeyboardEvent) => {
   if (!chatMessage.value.trim()) return;
@@ -115,14 +97,14 @@ const onPressRunAction = async () => {
   }
 };
 
-onMounted(() => {
+onMounted(async () => {
   // Set initial picked model from store
   if (settingStore.availableModels.length > 0) {
-    const defaultModel = settingStore.settings.find((s) => s.key === "default_model")?.value as string;
+    const defaultModel = settingStore.ttaSettings.find((s) => s.key === "default_model")?.value as string;
     pickedModel.value = defaultModel || settingStore.availableModels.at(-1) || "";
   }
 
-  getTextToActionActions();
+  await settingStore.loadTTAActions();
 });
 </script>
 

@@ -1,26 +1,44 @@
+import type TextToActionAction from "@/models/text-to-action/TextToActionAction";
 import type TextToActionSetting from "@/models/text-to-action/TextToActionSetting";
 import { defineStore } from "pinia";
 import { ref } from "vue";
 import { TextToActionService } from "@/services/text-to-action/TextToAction.service";
+import { TextToActionActionService } from "@/services/text-to-action/TextToActionAction.service";
 import { TextToActionSettingService } from "@/services/text-to-action/TextToActionSetting.service";
 
 export const useSettingStore = defineStore("settings", () => {
-  const settings = ref<TextToActionSetting[]>([]);
+  const ttaSettings = ref<TextToActionSetting[]>([]);
+  const ttaActions = ref<TextToActionAction[]>([]);
   const availableModels = ref<string[]>([]);
-  const isLoadingSettings = ref(false);
+  const isLoadingTTASettings = ref(false);
+  const isLoadingTTAActions = ref(false);
   const isLoadingModels = ref(false);
 
-  const loadSettings = async () => {
-    isLoadingSettings.value = true;
+  const loadTTASettings = async () => {
+    isLoadingTTASettings.value = true;
 
     try {
-      settings.value = await TextToActionSettingService().getSettings();
+      ttaSettings.value = await TextToActionSettingService().getSettings();
     } catch (error) {
-      console.error("Failed to load settings:", error);
-      settings.value = [];
+      console.error("Failed to load TTA settings:", error);
+      ttaSettings.value = [];
       throw error;
     } finally {
-      isLoadingSettings.value = false;
+      isLoadingTTASettings.value = false;
+    }
+  };
+
+  const loadTTAActions = async () => {
+    isLoadingTTAActions.value = true;
+
+    try {
+      ttaActions.value = await TextToActionActionService().getActions();
+    } catch (error) {
+      console.error("Failed to load TTA actions:", error);
+      ttaActions.value = [];
+      throw error;
+    } finally {
+      isLoadingTTAActions.value = false;
     }
   };
 
@@ -39,15 +57,18 @@ export const useSettingStore = defineStore("settings", () => {
   };
 
   const loadAll = async () => {
-    await Promise.all([loadSettings(), loadModels()]);
+    await Promise.all([loadTTASettings(), loadTTAActions(), loadModels()]);
   };
 
   return {
-    settings,
+    ttaSettings,
+    ttaActions,
     availableModels,
-    isLoadingSettings,
+    isLoadingTTASettings,
+    isLoadingTTAActions,
     isLoadingModels,
-    loadSettings,
+    loadTTASettings,
+    loadTTAActions,
     loadModels,
     loadAll,
   };
