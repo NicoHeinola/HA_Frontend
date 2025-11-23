@@ -1,5 +1,3 @@
-import { isValidJSON } from "@/utils/jsonText";
-
 export const rules = () => {
   const rules: any = {};
 

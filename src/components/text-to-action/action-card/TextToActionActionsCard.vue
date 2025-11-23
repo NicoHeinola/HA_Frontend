@@ -33,7 +33,7 @@ const openEditDialog = async () => {
   const editedAction = await openDialog({
     component: TextToActionActionDialog,
     props: {
-      action: JSON.parse(JSON.stringify(action.value)),
+      action: structuredClone(action.value),
     },
   });
 

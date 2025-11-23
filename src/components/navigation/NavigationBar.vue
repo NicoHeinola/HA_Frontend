@@ -43,7 +43,7 @@ const getLinkColor = (route: string) => {
             <v-icon :icon="link.icon" />
           </template>
 
-          <v-list-item-title v-text="link.text" />
+          <v-list-item-title :text="link.text" />
         </v-list-item>
       </template>
     </template>
@@ -60,7 +60,7 @@ const getLinkColor = (route: string) => {
             <v-icon :icon="link.icon" />
           </template>
 
-          <v-list-item-title v-text="link.text" />
+          <v-list-item-title :text="link.text" />
         </v-list-item>
       </template>
     </template>
