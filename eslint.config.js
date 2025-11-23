@@ -1,7 +1,8 @@
 import vuetify from "eslint-config-vuetify";
+import pluginVue from "eslint-plugin-vue";
 
 export default vuetify(
-  {},
+  pluginVue.configs["flat/recommended"],
   {
     rules: {
       "no-var": "error",
@@ -14,6 +15,7 @@ export default vuetify(
       "vue/script-indent": "off",
       "vue/attributes-order": "off",
       "semi": "off",
+      "vue/max-attributes-per-line": ["error", { singleline: 10 }],
     },
   },
 );

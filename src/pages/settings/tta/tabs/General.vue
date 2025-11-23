@@ -133,6 +133,7 @@ onMounted(async () => {
     <v-col class="d-flex align-center justify-end" cols="12">
       <v-btn
         color="success"
+        prepend-icon="mdi-content-save"
         :disabled="!areTTASettingsValid"
         :loading="!!isLoadingTTASettings"
         @click="saveTextToActionSettings"

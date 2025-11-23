@@ -11,6 +11,7 @@ import { findSettingByKey, updateSettingValue } from "@/utils/settingsHelpers";
 const settingStore = useSettingStore();
 
 const isLoadingTTASettings = ref<boolean>(false);
+const isSeeding = ref<boolean>(false);
 const { errorSnackbar } = useErrorSnackbar();
 const openSnackbar = useSnackbar();
 const openConfirm = useConfirm();
@@ -21,6 +22,32 @@ const systemPromptSetting = computed({
     updateSettingValue(settingStore.ttaSettings, "system_prompt", value);
   },
 });
+
+const seedSystemPrompt = async () => {
+  const ok = await openConfirm({
+    props: {
+      title: "Seed System Prompt",
+      text: "Are you sure you want to seed the system prompt? This will overwrite the existing system prompt.",
+    },
+  });
+
+  if (!ok) return;
+
+  isSeeding.value = true;
+
+  try {
+    await TextToActionSettingService().seedSettings({
+      replace: true,
+      keys_to_seed: ["system_prompt"],
+    });
+    openSnackbar({ props: { text: "System prompt seeded" } });
+    await settingStore.loadTTASettings();
+  } catch (error) {
+    errorSnackbar(error, openSnackbar);
+  }
+
+  isSeeding.value = false;
+};
 
 const saveSystemPrompt = async () => {
   const ok = await openConfirm({
@@ -54,6 +81,17 @@ const saveSystemPrompt = async () => {
   <v-row>
     <v-col class="d-flex align-center justify-space-between" cols="12">
       <h2>System Prompt</h2>
+      <div class="d-flex align-center ga-2">
+        <v-btn
+          color="error"
+          :loading="!!isSeeding"
+          prepend-icon="mdi-seed"
+          variant="outlined"
+          @click="seedSystemPrompt"
+        >
+          Seed
+        </v-btn>
+      </div>
     </v-col>
 
     <v-col class="pb-0" cols="12">
@@ -67,11 +105,18 @@ const saveSystemPrompt = async () => {
     </v-col>
 
     <v-col cols="12">
-      <v-textarea v-model="systemPromptSetting" label="System prompt" :loading="isLoadingTTASettings" rows="25" />
+      <v-textarea
+        v-model="systemPromptSetting"
+        label="System prompt"
+        :loading="isSeeding || isLoadingTTASettings"
+        rows="25"
+      />
     </v-col>
 
     <v-col class="d-flex align-center justify-end" cols="12">
-      <v-btn color="success" :loading="isLoadingTTASettings" @click="saveSystemPrompt"> Save </v-btn>
+      <v-btn color="success" prepend-icon="mdi-content-save" :loading="isLoadingTTASettings" @click="saveSystemPrompt">
+        Save
+      </v-btn>
     </v-col>
   </v-row>
 </template>
