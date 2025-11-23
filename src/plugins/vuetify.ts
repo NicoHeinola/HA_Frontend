@@ -17,9 +17,9 @@ import "vuetify/styles";
 // https://vuetifyjs.com/en/introduction/why-vuetify/#feature-guides
 export default createVuetify({
   theme: {
-    defaultTheme: "dark",
+    defaultTheme: "SoftBlue",
     themes: {
-      dark: {
+      SoftContrastDark: {
         dark: true,
         colors: {
           primary: "#0891B2",
@@ -30,6 +30,45 @@ export default createVuetify({
 
           surface: "#1C1917",
           background: "#0C0A09",
+        },
+      },
+      GPTDark: {
+        dark: true,
+        colors: {
+          primary: "#0EA5E9",
+          secondary: "#FB923C",
+          error: "#F87171",
+          success: "#4ADE80",
+          warning: "#FCD34D",
+
+          surface: "#262626",
+          background: "#171717",
+        },
+      },
+      ContrastGPT: {
+        dark: true,
+        colors: {
+          primary: "#FCA311",
+          secondary: "#94ace0ff",
+          error: "#EF4444",
+          success: "#22C55E",
+          warning: "#FBBF24",
+
+          surface: "#1f1f1fff",
+          background: "#000000",
+        },
+      },
+      SoftBlue: {
+        dark: true,
+        colors: {
+          primary: "#FFA987",
+          secondary: "#B2E4DB",
+          error: "#EF4444",
+          success: "#22C55E",
+          warning: "#FBBF24",
+
+          surface: "#2f2f36ff",
+          background: "#1E1E24",
         },
       },
     },

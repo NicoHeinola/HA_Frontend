@@ -1,6 +1,9 @@
 <script lang="ts" setup>
-import { computed, ref } from "vue";
+import { computed, ref, watch } from "vue";
 import { useRoute } from "vue-router";
+import { useTheme } from "vuetify";
+import { useThemeStore } from "@/stores/themeStore";
+import ThemePicker from "./ThemePicker.vue";
 
 const links = ref([
   {
@@ -63,6 +66,7 @@ const getLinkColor = (route: string) => {
           <v-list-item-title>{{ link.text }}</v-list-item-title>
         </v-list-item>
       </template>
+      <theme-picker />
     </template>
   </v-navigation-drawer>
 </template>

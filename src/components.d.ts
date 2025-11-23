@@ -25,6 +25,7 @@ declare module 'vue' {
     TextToActionActionForm: typeof import('./components/text-to-action/action-form/TextToActionActionForm.vue')['default']
     TextToActionActionsCard: typeof import('./components/text-to-action/action-card/TextToActionActionsCard.vue')['default']
     TextToActionSettingsForm: typeof import('./components/text-to-action/settings-form/TextToActionSettingsForm.vue')['default']
+    ThemePicker: typeof import('./components/navigation/ThemePicker.vue')['default']
     TtaCachedModelsTable: typeof import('./components/text-to-action/tta-cached-models-table/TtaCachedModelsTable.vue')['default']
   }
 }
