@@ -1,6 +1,11 @@
 <script lang="ts" setup>
+interface CachedModel {
+  name: string;
+  isDefault: boolean;
+}
+
 const props = defineProps<{
-  models: string[];
+  models: CachedModel[];
   isLoading: boolean;
 }>();
 
@@ -12,10 +17,11 @@ const emit = defineEmits<{
 <template>
   <v-data-table
     :headers="[
+      { title: 'Default', key: 'isDefault', align: 'center', sortable: false, width: '0px' },
       { title: 'Model Name', key: 'name', align: 'start' },
       { title: 'Actions', key: 'actions', align: 'end', sortable: false },
     ]"
-    :items="props.models.map((model) => ({ name: model }))"
+    :items="props.models"
     :items-per-page-options="[
       {
         title: 'All',
@@ -25,6 +31,10 @@ const emit = defineEmits<{
     :items-per-page="-1"
     :loading="props.isLoading"
   >
+    <template #item.isDefault="{ item }">
+      <v-icon v-if="item.isDefault" size="small" color="secondary">mdi-star</v-icon>
+    </template>
+
     <template #item.actions="{ item }">
       <v-btn
         icon="mdi-delete"

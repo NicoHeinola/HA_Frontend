@@ -137,7 +137,12 @@ const deleteCachedModels = async () => {
     </v-col>
     <v-col cols="12">
       <TtaCachedModelsTable
-        :models="settingStore.cachedModels"
+        :models="
+          settingStore.cachedModels.map((model) => ({
+            name: model,
+            isDefault: model === defaultModel,
+          }))
+        "
         :is-loading="isLoadingCachedModels || settingStore.isLoadingCachedModels"
         @delete="deleteCachedModel"
       />
