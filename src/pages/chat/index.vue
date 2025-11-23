@@ -6,8 +6,9 @@ import { BackendService } from "@/services/backend/TextToAction.service";
 import { TextToActionService } from "@/services/text-to-action/TextToAction.service";
 import { TextToActionActionService } from "@/services/text-to-action/TextToActionAction.service";
 import { useErrorSnackbar } from "@/utils/errorSnackbar";
+import { useSettingStore } from "@/stores/settingStore";
 
-const availableModels = ref<string[]>([]);
+const settingStore = useSettingStore();
 const pickedModel = ref<string>("");
 const chatMessage = ref<string>("");
 const aiResponse = ref<Record<string, any> | null>(null);
@@ -16,14 +17,15 @@ const aiResponse = ref<Record<string, any> | null>(null);
 const allActions = ref<TextToActionAction[]>([]);
 
 const isSendingMessage = ref(false);
-const isLoadingModels = ref(false);
 const isLoadingActions = ref(false);
 
 const isPlaybackEnabled = ref(false);
 
 const isLoading = computed(() => {
-  return isSendingMessage.value || isLoadingModels.value || isLoadingActions.value;
+  return isSendingMessage.value || isLoadingActions.value;
 });
+
+const availableModels = computed(() => settingStore.availableModels);
 
 const openSnackbar = useSnackbar();
 const { errorSnackbar } = useErrorSnackbar();
@@ -55,25 +57,6 @@ const getTextToActionActions = async () => {
     allActions.value = [];
   }
   isLoadingActions.value = false;
-};
-
-const getAvailableModels = async () => {
-  isLoadingModels.value = true;
-
-  try {
-    const models = await TextToActionService().getModels();
-    availableModels.value = models["available_models"] || [];
-
-    if (availableModels.value.length > 0) {
-      pickedModel.value = availableModels.value[availableModels.value.length - 1] || "";
-    } else {
-      pickedModel.value = "";
-    }
-  } catch (error) {
-    errorSnackbar(error, openSnackbar);
-  } finally {
-    isLoadingModels.value = false;
-  }
 };
 
 const onEnter = async (event: KeyboardEvent) => {
@@ -135,7 +118,11 @@ const onPressRunAction = async () => {
 };
 
 onMounted(() => {
-  getAvailableModels();
+  // Set initial picked model from store
+  if (availableModels.value.length > 0) {
+    pickedModel.value = availableModels.value[availableModels.value.length - 1] || "";
+  }
+
   getTextToActionActions();
 });
 </script>

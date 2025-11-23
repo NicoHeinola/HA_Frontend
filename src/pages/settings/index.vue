@@ -1,6 +1,5 @@
 <script lang="ts" setup>
-import { ref, onMounted } from "vue";
-import type TextToActionSetting from "@/models/text-to-action/TextToActionSetting";
+import { ref, onMounted, computed } from "vue";
 import { TextToActionSettingService } from "@/services/text-to-action/TextToActionSetting.service";
 import { useSnackbar } from "@/components/use-snackbar/useSnackbar";
 import { useErrorSnackbar } from "@/utils/errorSnackbar";
@@ -11,8 +10,9 @@ import { useDialog } from "@/components/use-dialog/useDialog";
 import TextToActionActionDialog from "@/components/text-to-action/action-dialog/TextToActionActionDialog.vue";
 import { TextToActionActionService } from "@/services/text-to-action/TextToActionAction.service";
 import { isValidJSON } from "@/utils/jsonText";
+import { useSettingStore } from "@/stores/settingStore";
 
-const textToActionSettings = ref<TextToActionSetting[]>([]);
+const settingStore = useSettingStore();
 const textToActionActions = ref<TextToActionAction[]>([]);
 
 const isLoading = ref<boolean>(false);
@@ -24,16 +24,12 @@ const openConfirm = useConfirm();
 const { openPrompt } = usePrompt();
 const openDialog = useDialog();
 
-const getTextToActionSettings = async () => {
-  isLoading.value = true;
-  try {
-    textToActionSettings.value = await TextToActionSettingService().getSettings();
-  } catch (error) {
-    errorSnackbar(error, openSnackbar);
-    textToActionSettings.value = [];
-  }
-  isLoading.value = false;
-};
+const textToActionSettings = computed({
+  get: () => settingStore.settings,
+  set: (value) => {
+    settingStore.settings = value;
+  },
+});
 
 const getTextToActionActions = async () => {
   isLoading.value = true;
@@ -61,7 +57,7 @@ const seedTextToActionSettings = async () => {
   try {
     await TextToActionSettingService().seedSettings({ replace: true });
     openSnackbar({ props: { text: "TTA Settings seeded" } });
-    await getTextToActionSettings();
+    await settingStore.loadSettings();
   } catch (error) {
     errorSnackbar(error, openSnackbar);
   }
@@ -90,7 +86,7 @@ const saveTextToActionSettings = async () => {
 
     openSnackbar({ props: { text: "General TTA Settings saved" } });
 
-    await getTextToActionSettings();
+    await settingStore.loadSettings();
   } catch (error) {
     errorSnackbar(error, openSnackbar);
   }
@@ -138,7 +134,6 @@ const importNewAction = async () => {
 };
 
 onMounted(async () => {
-  await getTextToActionSettings();
   await getTextToActionActions();
 });
 </script>
