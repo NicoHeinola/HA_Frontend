@@ -25,8 +25,6 @@ const isLoading = computed(() => {
   return isSendingMessage.value || isLoadingActions.value;
 });
 
-const availableModels = computed(() => settingStore.availableModels);
-
 const openSnackbar = useSnackbar();
 const { errorSnackbar } = useErrorSnackbar();
 
@@ -42,7 +40,7 @@ const aiResponseTextParts = computed(() => {
 const aiResponseAction = computed(() => {
   const action = aiResponse.value?.["action"] || null;
 
-  const isValidAction = allActions.value.find(a => a.name === action);
+  const isValidAction = allActions.value.find((a) => a.name === action);
   if (!isValidAction) return null;
 
   return action;
@@ -119,8 +117,9 @@ const onPressRunAction = async () => {
 
 onMounted(() => {
   // Set initial picked model from store
-  if (availableModels.value.length > 0) {
-    pickedModel.value = availableModels.value.at(-1) || "";
+  if (settingStore.availableModels.length > 0) {
+    const defaultModel = settingStore.settings.find((s) => s.key === "default_model")?.value as string;
+    pickedModel.value = defaultModel || settingStore.availableModels.at(-1) || "";
   }
 
   getTextToActionActions();
@@ -153,7 +152,7 @@ onMounted(() => {
                     </template>
                     <v-list>
                       <v-list-item
-                        v-for="(model, index) in availableModels"
+                        v-for="(model, index) in settingStore.availableModels"
                         :key="index"
                         :active="pickedModel === model"
                         :value="model"
