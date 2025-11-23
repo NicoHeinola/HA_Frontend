@@ -46,7 +46,7 @@ export const useSettingStore = defineStore("settings", () => {
     isLoadingModels.value = true;
     try {
       const models = await TextToActionService().getModels();
-      availableModels.value = models["available_models"] || [];
+      availableModels.value = models || [];
     } catch (error) {
       console.error("Failed to load models:", error);
       availableModels.value = [];
