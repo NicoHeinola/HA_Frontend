@@ -21,6 +21,7 @@ declare module 'vue-router/auto-routes' {
     '/chat/': RouteRecordInfo<'/chat/', '/chat', Record<never, never>, Record<never, never>>,
     '/settings/tta/': RouteRecordInfo<'/settings/tta/', '/settings/tta', Record<never, never>, Record<never, never>>,
     '/settings/tta/tabs/Actions': RouteRecordInfo<'/settings/tta/tabs/Actions', '/settings/tta/tabs/Actions', Record<never, never>, Record<never, never>>,
+    '/settings/tta/tabs/CachedModels': RouteRecordInfo<'/settings/tta/tabs/CachedModels', '/settings/tta/tabs/CachedModels', Record<never, never>, Record<never, never>>,
     '/settings/tta/tabs/General': RouteRecordInfo<'/settings/tta/tabs/General', '/settings/tta/tabs/General', Record<never, never>, Record<never, never>>,
     '/settings/tta/tabs/SystemPrompt': RouteRecordInfo<'/settings/tta/tabs/SystemPrompt', '/settings/tta/tabs/SystemPrompt', Record<never, never>, Record<never, never>>,
   }
@@ -46,6 +47,10 @@ declare module 'vue-router/auto-routes' {
     }
     'src/pages/settings/tta/tabs/Actions.vue': {
       routes: '/settings/tta/tabs/Actions'
+      views: never
+    }
+    'src/pages/settings/tta/tabs/CachedModels.vue': {
+      routes: '/settings/tta/tabs/CachedModels'
       views: never
     }
     'src/pages/settings/tta/tabs/General.vue': {

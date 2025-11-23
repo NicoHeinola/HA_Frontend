@@ -1,15 +1,17 @@
 <script lang="ts" setup>
 import { ref } from "vue";
 import Actions from "./tabs/Actions.vue";
+import CachedModels from "./tabs/CachedModels.vue";
 import General from "./tabs/General.vue";
 import SystemPrompt from "./tabs/SystemPrompt.vue";
 
-const activeTab = ref<"general" | "system_prompt" | "actions">("general");
+const activeTab = ref<"general" | "system_prompt" | "actions" | "cached_models">("general");
 
 const tabs = [
+  { id: "actions", label: "Actions", component: Actions },
   { id: "general", label: "General", component: General },
   { id: "system_prompt", label: "System Prompt", component: SystemPrompt },
-  { id: "actions", label: "Actions", component: Actions },
+  { id: "cached_models", label: "Cached Models", component: CachedModels },
 ];
 </script>
 

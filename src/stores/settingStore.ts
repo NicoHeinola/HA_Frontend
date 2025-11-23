@@ -4,15 +4,18 @@ import { defineStore } from "pinia";
 import { ref } from "vue";
 import { TextToActionService } from "@/services/text-to-action/TextToAction.service";
 import { TextToActionActionService } from "@/services/text-to-action/TextToActionAction.service";
+import { TextToActionCachedModelService } from "@/services/text-to-action/TextToActionCachedModel.service";
 import { TextToActionSettingService } from "@/services/text-to-action/TextToActionSetting.service";
 
 export const useSettingStore = defineStore("settings", () => {
   const ttaSettings = ref<TextToActionSetting[]>([]);
   const ttaActions = ref<TextToActionAction[]>([]);
   const availableModels = ref<string[]>([]);
+  const cachedModels = ref<string[]>([]);
   const isLoadingTTASettings = ref(false);
   const isLoadingTTAActions = ref(false);
   const isLoadingModels = ref(false);
+  const isLoadingCachedModels = ref(false);
 
   const loadTTASettings = async () => {
     isLoadingTTASettings.value = true;
@@ -56,20 +59,37 @@ export const useSettingStore = defineStore("settings", () => {
     }
   };
 
+  const loadCachedModels = async () => {
+    isLoadingCachedModels.value = true;
+    try {
+      const models = await TextToActionCachedModelService().getCachedModels();
+      cachedModels.value = models || [];
+    } catch (error) {
+      console.error("Failed to load cached models:", error);
+      cachedModels.value = [];
+      throw error;
+    } finally {
+      isLoadingCachedModels.value = false;
+    }
+  };
+
   const loadAll = async () => {
-    await Promise.all([loadTTASettings(), loadTTAActions(), loadModels()]);
+    await Promise.all([loadTTASettings(), loadTTAActions(), loadModels(), loadCachedModels()]);
   };
 
   return {
     ttaSettings,
     ttaActions,
     availableModels,
+    cachedModels,
     isLoadingTTASettings,
     isLoadingTTAActions,
     isLoadingModels,
+    isLoadingCachedModels,
     loadTTASettings,
     loadTTAActions,
     loadModels,
+    loadCachedModels,
     loadAll,
   };
 });
