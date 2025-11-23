@@ -19,9 +19,9 @@ const links = ref([
 const route = useRoute();
 const selectedLink = computed(() => route.path);
 
-const topLinks = computed(() => links.value.filter(link => !link.bottom));
+const topLinks = computed(() => links.value.filter((link) => !link.bottom));
 
-const bottomLinks = computed(() => links.value.filter(link => link.bottom));
+const bottomLinks = computed(() => links.value.filter((link) => link.bottom));
 
 const getLinkColor = (route: string) => {
   return selectedLink.value === route ? "secondary" : "";
