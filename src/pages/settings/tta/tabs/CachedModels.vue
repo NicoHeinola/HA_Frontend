@@ -38,6 +38,15 @@ const deleteCachedModel = async (modelName: string) => {
 };
 
 const cacheModel = async (modelName: string) => {
+  const ok = await openConfirm({
+    props: {
+      title: "Cache Model",
+      text: `Are you sure you want to cache the model "${modelName}"?`,
+    },
+  });
+
+  if (!ok) return;
+
   isLoadingCachedModels.value = true;
 
   try {
