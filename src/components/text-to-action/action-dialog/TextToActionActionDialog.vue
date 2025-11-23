@@ -5,11 +5,11 @@ import { TextToActionActionService } from "@/services/text-to-action/TextToActio
 import { useErrorSnackbar } from "@/utils/errorSnackbar";
 
 const props = defineProps<{
-  action?: TextToActionAction;
+  action?: TextToActionAction
 }>();
 
 const emit = defineEmits<{
-  (e: "resolve", payload: TextToActionAction | false): void;
+  (e: "resolve", payload: TextToActionAction | false): void
 }>();
 
 const action = ref<TextToActionAction>(
@@ -23,7 +23,7 @@ const action = ref<TextToActionAction>(
         },
       },
     },
-  }
+  },
 );
 
 const isValid = ref(false);
@@ -60,7 +60,13 @@ const save = async () => {
     </v-card-text>
     <v-card-actions class="d-flex justify-end">
       <v-btn color="error" variant="outlined" @click="emit('resolve', false)">Cancel</v-btn>
-      <v-btn color="success" :disabled="!isValid" variant="elevated" prepend-icon="mdi-content-save" @click="save">
+      <v-btn
+        color="success"
+        :disabled="!isValid"
+        variant="elevated"
+        prepend-icon="mdi-content-save"
+        @click="save"
+      >
         Save
       </v-btn>
     </v-card-actions>
