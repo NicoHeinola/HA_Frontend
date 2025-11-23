@@ -9,9 +9,9 @@ const links = ref([
     route: "/chat",
   },
   {
-    text: "Settings",
+    text: "TTA Settings",
     icon: "mdi-cog",
-    route: "/settings",
+    route: "/settings/tta",
     bottom: true,
   },
 ]);

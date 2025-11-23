@@ -19,7 +19,10 @@ declare module 'vue-router/auto-routes' {
    */
   export interface RouteNamedMap {
     '/chat/': RouteRecordInfo<'/chat/', '/chat', Record<never, never>, Record<never, never>>,
-    '/settings/': RouteRecordInfo<'/settings/', '/settings', Record<never, never>, Record<never, never>>,
+    '/settings/tta/': RouteRecordInfo<'/settings/tta/', '/settings/tta', Record<never, never>, Record<never, never>>,
+    '/settings/tta/tabs/Actions': RouteRecordInfo<'/settings/tta/tabs/Actions', '/settings/tta/tabs/Actions', Record<never, never>, Record<never, never>>,
+    '/settings/tta/tabs/General': RouteRecordInfo<'/settings/tta/tabs/General', '/settings/tta/tabs/General', Record<never, never>, Record<never, never>>,
+    '/settings/tta/tabs/SystemPrompt': RouteRecordInfo<'/settings/tta/tabs/SystemPrompt', '/settings/tta/tabs/SystemPrompt', Record<never, never>, Record<never, never>>,
   }
 
   /**
@@ -37,8 +40,20 @@ declare module 'vue-router/auto-routes' {
       routes: '/chat/'
       views: never
     }
-    'src/pages/settings/index.vue': {
-      routes: '/settings/'
+    'src/pages/settings/tta/index.vue': {
+      routes: '/settings/tta/'
+      views: never
+    }
+    'src/pages/settings/tta/tabs/Actions.vue': {
+      routes: '/settings/tta/tabs/Actions'
+      views: never
+    }
+    'src/pages/settings/tta/tabs/General.vue': {
+      routes: '/settings/tta/tabs/General'
+      views: never
+    }
+    'src/pages/settings/tta/tabs/SystemPrompt.vue': {
+      routes: '/settings/tta/tabs/SystemPrompt'
       views: never
     }
   }
