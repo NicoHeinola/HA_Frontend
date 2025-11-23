@@ -29,7 +29,7 @@ const getLinkColor = (route: string) => {
 </script>
 
 <template>
-  <v-navigation-drawer location="left" :model-value="true">
+  <v-navigation-drawer location="left" :mobile="false" :model-value="true">
     <template #prepend>
       <template v-for="link in topLinks" :key="link.text">
         <v-list-item
