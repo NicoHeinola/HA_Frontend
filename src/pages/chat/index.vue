@@ -6,6 +6,7 @@ import { BackendService } from "@/services/backend/TextToAction.service";
 import { TextToActionService } from "@/services/text-to-action/TextToAction.service";
 import { useSettingStore } from "@/stores/settingStore";
 import { useErrorSnackbar } from "@/utils/errorSnackbar";
+import { findSettingByKey } from "@/utils/settingsHelpers";
 
 const settingStore = useSettingStore();
 
@@ -125,13 +126,16 @@ const runActionFromAIResponse = async (aiResponse: Record<string, any>) => {
   }
 };
 
-onMounted(async () => {
-  // Set initial picked model from store
-  if (settingStore.availableModels.length > 0) {
-    const defaultModel = settingStore.ttaSettings.find((s) => s.key === "default_model")?.value as string;
-    selectedModel.value = defaultModel || settingStore.availableModels.at(-1) || "";
-  }
-});
+watch(
+  () => settingStore.ttaSettings,
+  (newSettings) => {
+    const defaultModel = findSettingByKey(newSettings, "default_model")?.value as string;
+    if (defaultModel) {
+      selectedModel.value = defaultModel;
+    }
+  },
+  { immediate: true },
+);
 </script>
 
 <template>
