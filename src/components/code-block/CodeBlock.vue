@@ -4,7 +4,7 @@ const slots = useSlots();
 const formattedSlotText = computed(() => {
   const slot: VNode[] = slots.default ? slots.default() : [];
   const slotText = slot
-    .map(vnode => {
+    .map((vnode) => {
       if (typeof vnode.children === "string") {
         return vnode.children;
       }
@@ -12,12 +12,12 @@ const formattedSlotText = computed(() => {
     })
     .join("");
 
-  return slotText;
+  return slotText.trim();
 });
 </script>
 
 <template>
-  <pre class="pa-4 bg-grey-darken-4 rounded overflow-auto">
-    {{ formattedSlotText }}
-  </pre>
+  <div class="h-100 bg-background overflow-y-auto">
+    <pre class="pa-4 rounded">{{ formattedSlotText }}</pre>
+  </div>
 </template>
