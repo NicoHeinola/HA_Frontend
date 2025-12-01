@@ -20,7 +20,11 @@ const fetchLogs = async () => {
     const response = await LogService().getTextToActionLogs();
     logs.value = response
       .toSorted((a: any, b: any) => b.timestamp.localeCompare(a.timestamp))
-      .map((log: any) => `${log.timestamp} [${log.level}]:\t${log.message}`.trim());
+      .map((log: any) => {
+        const timestamp = log.timestamp?.padEnd(24, " ");
+        const level = `[${log.level}]`?.padStart(7, " ");
+        return `${timestamp} ${level}: ${log.message}`.trim();
+      });
   } catch (error) {
     errorSnackbar(error, openSnackbar);
   } finally {
