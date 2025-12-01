@@ -12,7 +12,7 @@ import { TextToActionSettingKey } from "@/models/text-to-action/TextToActionSett
 const settingStore = useSettingStore();
 
 const defaultModel = computed(() => {
-  return findSettingByKey(settingStore.ttaSettings, "default_model")?.value;
+  return findSettingByKey(settingStore.ttaSettings, TextToActionSettingKey.DefaultModel)?.value;
 });
 
 const isLoadingCachedModels = ref<boolean>(false);

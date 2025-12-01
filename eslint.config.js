@@ -16,6 +16,7 @@ export default vuetify(
       "vue/max-attributes-per-line": "off",
       "semi": "off",
       "unicorn/prefer-structured-clone": "off",
+      "perfectionist/sort-imports": "off",
       "@stylistic/member-delimiter-style": [
         "error",
         {

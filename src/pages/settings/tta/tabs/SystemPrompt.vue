@@ -7,6 +7,7 @@ import { TextToActionSettingService } from "@/services/text-to-action/TextToActi
 import { useSettingStore } from "@/stores/settingStore";
 import { useErrorSnackbar } from "@/utils/errorSnackbar";
 import { findSettingByKey, updateSettingValue } from "@/utils/settingsHelpers";
+import { TextToActionSettingKey } from "@/models/text-to-action/TextToActionSetting";
 
 const settingStore = useSettingStore();
 
@@ -17,9 +18,9 @@ const openSnackbar = useSnackbar();
 const openConfirm = useConfirm();
 
 const systemPromptSetting = computed({
-  get: () => findSettingByKey(settingStore.ttaSettings, "system_prompt")?.value || "",
+  get: () => findSettingByKey(settingStore.ttaSettings, TextToActionSettingKey.SystemPrompt)?.value || "",
   set: (value) => {
-    updateSettingValue(settingStore.ttaSettings, "system_prompt", value);
+    updateSettingValue(settingStore.ttaSettings, TextToActionSettingKey.SystemPrompt, value);
   },
 });
 
@@ -38,7 +39,7 @@ const seedSystemPrompt = async () => {
   try {
     await TextToActionSettingService().seedSettings({
       replace: true,
-      keys_to_seed: ["system_prompt"],
+      keys_to_seed: [TextToActionSettingKey.SystemPrompt],
     });
     openSnackbar({ props: { text: "System prompt seeded" } });
     await settingStore.loadTTASettings();
@@ -62,7 +63,7 @@ const saveSystemPrompt = async () => {
   isLoadingTTASettings.value = true;
 
   try {
-    const setting = findSettingByKey(settingStore.ttaSettings, "system_prompt");
+    const setting = findSettingByKey(settingStore.ttaSettings, TextToActionSettingKey.SystemPrompt);
     if (setting && setting.id) {
       await TextToActionSettingService().updateSetting(setting.id, setting);
     }

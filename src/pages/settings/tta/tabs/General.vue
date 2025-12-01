@@ -6,6 +6,7 @@ import { TextToActionSettingService } from "@/services/text-to-action/TextToActi
 import { useSettingStore } from "@/stores/settingStore";
 import { useErrorSnackbar } from "@/utils/errorSnackbar";
 import { findSettingByKey, updateSettingValue } from "@/utils/settingsHelpers";
+import { TextToActionSettingKey } from "@/models/text-to-action/TextToActionSetting";
 import { rules } from "./rules";
 
 const settingStore = useSettingStore();
@@ -20,7 +21,12 @@ const formRef = ref();
 const allRules = rules();
 
 const ttaSettings = computed({
-  get: () => settingStore.ttaSettings.filter((s) => ["default_model", "prediction_timeout"].includes(s.key)),
+  get: () =>
+    settingStore.ttaSettings.filter((s) =>
+      [TextToActionSettingKey.DefaultModel, TextToActionSettingKey.PredictionTimeout].includes(
+        s.key as TextToActionSettingKey,
+      ),
+    ),
   set: (value) => {
     settingStore.ttaSettings = value;
   },
@@ -41,7 +47,7 @@ const seedTextToActionSettings = async () => {
   try {
     await TextToActionSettingService().seedSettings({
       replace: true,
-      keys_to_seed: ["default_model", "prediction_timeout"],
+      keys_to_seed: [TextToActionSettingKey.DefaultModel, TextToActionSettingKey.PredictionTimeout],
     });
     openSnackbar({ props: { text: "TTA Settings seeded" } });
     await settingStore.loadTTASettings();
@@ -112,18 +118,22 @@ onMounted(async () => {
               :items="settingStore.availableModels"
               label="Default Model"
               :loading="isSeeding || isLoadingTTASettings"
-              :model-value="findSettingByKey(ttaSettings, 'default_model')?.value"
-              :rules="allRules['default_model']"
-              @update:model-value="(update) => updateSettingValue(ttaSettings, 'default_model', update)"
+              :model-value="findSettingByKey(ttaSettings, TextToActionSettingKey.DefaultModel)?.value"
+              :rules="allRules[TextToActionSettingKey.DefaultModel]"
+              @update:model-value="
+                (update) => updateSettingValue(ttaSettings, TextToActionSettingKey.DefaultModel, update)
+              "
             />
           </v-col>
           <v-col cols="12">
             <v-number-input
               label="Prediction Timeout (seconds)"
               :loading="isSeeding || isLoadingTTASettings"
-              :model-value="Number(findSettingByKey(ttaSettings, 'prediction_timeout')?.value)"
-              :rules="allRules['prediction_timeout']"
-              @update:model-value="(update) => updateSettingValue(ttaSettings, 'prediction_timeout', String(update))"
+              :model-value="Number(findSettingByKey(ttaSettings, TextToActionSettingKey.PredictionTimeout)?.value)"
+              :rules="allRules[TextToActionSettingKey.PredictionTimeout]"
+              @update:model-value="
+                (update) => updateSettingValue(ttaSettings, TextToActionSettingKey.PredictionTimeout, String(update))
+              "
             />
           </v-col>
         </v-row>
