@@ -23,6 +23,10 @@ const runningAction = ref(false);
 
 const display = useDisplay();
 
+const defaultModelName = computed(() => {
+  return findSettingByKey(settingStore.ttaSettings, TextToActionSettingKey.DefaultModel)?.value;
+});
+
 const isLoading = computed(() => {
   return isSendingMessage.value || settingStore.isLoadingTTAActions;
 });
@@ -217,17 +221,14 @@ watch(
                 <template #activator="{ props }">
                   <v-icon v-bind="props">mdi-robot</v-icon>
                 </template>
-                <v-list>
-                  <v-list-item
-                    v-for="(model, index) in settingStore.availableModels"
-                    :key="index"
-                    :active="selectedModel === model"
-                    :value="model"
-                    @click="selectedModel = model"
-                  >
-                    <v-list-item-title>{{ model }}</v-list-item-title>
-                  </v-list-item>
-                </v-list>
+                <model-list
+                  :models="settingStore.availableModels.map((modelName: string) => ({
+                    name: modelName,
+                    isDefault: modelName === defaultModelName,
+                    disabled: modelName === selectedModel,
+                  }))"
+                  @on-model-click="(model: any) => selectedModel = model.name"
+                />
               </v-menu>
               <v-icon
                 :aria-pressed="isPlaybackEnabled"

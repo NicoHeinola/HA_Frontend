@@ -1,13 +1,11 @@
 <script lang="ts" setup>
-const props = withDefaults(
-  defineProps<{
-    onModelClick?: (model: any) => void;
-    models: Array<Record<string, any>>;
-  }>(),
-  {
-    onModelClick: () => {},
-  },
-);
+const props = defineProps<{
+  models: Array<Record<string, any>>;
+}>();
+
+const emit = defineEmits<{
+  "on-model-click": [model: any];
+}>();
 </script>
 
 <template>
@@ -16,7 +14,7 @@ const props = withDefaults(
       v-for="model in props.models"
       :key="model.name"
       :disabled="!!model.disabled"
-      @click="props.onModelClick(model)"
+      @click="emit('on-model-click', model)"
     >
       <template #prepend>
         <slot name="prepend-item" :model="model">
