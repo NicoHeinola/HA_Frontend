@@ -48,7 +48,7 @@ onMounted(async () => {
   background-image: url("@/assets/backgrounds/cartographer.png");
   background-repeat: repeat;
   background-attachment: fixed;
-  opacity: 0.5;
+  opacity: 0.9;
   pointer-events: none;
 }
 </style>
