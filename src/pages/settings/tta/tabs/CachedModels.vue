@@ -7,6 +7,7 @@ import { TextToActionCachedModelService } from "@/services/text-to-action/TextTo
 import { useSettingStore } from "@/stores/settingStore";
 import { useErrorSnackbar } from "@/utils/errorSnackbar";
 import { findSettingByKey } from "@/utils/settingsHelpers";
+import { TextToActionSettingKey } from "@/models/text-to-action/TextToActionSetting";
 
 const settingStore = useSettingStore();
 
@@ -91,8 +92,22 @@ const deleteCachedModels = async () => {
 
 <template>
   <v-row>
+    <!-- Auto-cached models -->
     <v-col class="d-flex align-center justify-space-between" cols="12">
-      <h2>Cached Models</h2>
+      <info-text tooltip="Models that are automatically cached when the server starts up.">
+        <h2>Auto-cached Models</h2>
+      </info-text>
+
+      {{ findSettingByKey(settingStore.ttaSettings, TextToActionSettingKey.AutoCacheModels)?.value }}
+    </v-col>
+
+    <!-- Currently cached models -->
+    <v-col class="d-flex align-center justify-space-between" cols="12">
+      <info-text
+        tooltip="Currently loaded models. They never unload so using them is a lot faster. However, they do take up a lot of VRAM."
+      >
+        <h2>Cached Models</h2>
+      </info-text>
       <div class="d-flex align-center ga-2">
         <v-menu>
           <template #activator="{ props }">
