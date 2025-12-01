@@ -1,4 +1,6 @@
 <script lang="ts" setup>
+import { onMounted } from "vue";
+
 withDefaults(
   defineProps<{
     title?: string;
@@ -13,6 +15,20 @@ withDefaults(
 const emit = defineEmits<{
   (e: "resolve", payload: boolean): void;
 }>();
+
+const handleKeydown = (e: KeyboardEvent) => {
+  if (e.key === "Enter") {
+    e.preventDefault();
+    emit("resolve", true);
+  } else if (e.key === "Escape") {
+    e.preventDefault();
+    emit("resolve", false);
+  }
+};
+
+onMounted(() => {
+  window.addEventListener("keydown", handleKeydown);
+});
 </script>
 
 <template>

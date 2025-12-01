@@ -30,6 +30,7 @@ const emit = defineEmits<{
     ]"
     :items-per-page="-1"
     :loading="props.isLoading"
+    v-bind="$attrs"
   >
     <template #item.isDefault="{ item }">
       <v-icon v-if="item.isDefault" size="small" color="secondary">mdi-star</v-icon>
