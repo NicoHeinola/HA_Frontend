@@ -1,7 +1,7 @@
 import api from "../api";
 
-const baseUrl = (import.meta as any).env.VITE_TEXT_TO_ACTION_SERVICE_URL;
-const token = (import.meta as any).env.VITE_TEXT_TO_ACTION_TOKEN;
+export const baseUrl = (import.meta as any).env.VITE_TEXT_TO_ACTION_SERVICE_URL;
+export const token = (import.meta as any).env.VITE_TEXT_TO_ACTION_TOKEN;
 
 export const TextToActionService = () => {
   const getModels = async () => {
@@ -10,7 +10,7 @@ export const TextToActionService = () => {
         model_type: "gguf",
       },
       headers: {
-        "Authorization": `Bearer ${token}`,
+        Authorization: `Bearer ${token}`,
         "Content-Type": "application/json",
       },
     });
@@ -24,7 +24,7 @@ export const TextToActionService = () => {
       { text, ...params },
       {
         headers: {
-          "Authorization": `Bearer ${token}`,
+          Authorization: `Bearer ${token}`,
           "Content-Type": "application/json",
         },
       },
