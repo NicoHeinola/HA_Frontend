@@ -82,6 +82,32 @@ const removeAutoCachedModel = async (model: any) => {
   isLoadingAutoCachedModels.value = false;
 };
 
+const seedAutoCachedModels = async () => {
+  const ok = await openConfirm({
+    props: {
+      title: "Seed Auto-cache Settings",
+      text: "Are you sure you want to seed auto-cache settings? This will overwrite existing auto-cache settings.",
+    },
+  });
+
+  if (!ok) return;
+
+  isLoadingAutoCachedModels.value = true;
+
+  try {
+    await TextToActionSettingService().seedSettings({
+      replace: true,
+      keys_to_seed: [TextToActionSettingKey.AutoCachedModels],
+    });
+    openSnackbar({ props: { text: "Auto-cache settings seeded" } });
+    await settingStore.loadTTASettings();
+  } catch (error) {
+    errorSnackbar(error, openSnackbar);
+  }
+
+  isLoadingAutoCachedModels.value = false;
+};
+
 // --- Currently cached models functions
 const deleteCachedModel = async (model: any) => {
   const ok = await openConfirm({
@@ -178,6 +204,20 @@ const deleteCachedModels = async () => {
             "
             @on-model-click="addAutoCachedModel"
           />
+        </v-menu>
+        <v-menu>
+          <template #activator="{ props }">
+            <v-btn append-icon="mdi-chevron-down" v-bind="props" :loading="isLoadingAutoCachedModels" variant="outlined">
+              Actions
+            </v-btn>
+          </template>
+          <v-list>
+            <v-list-item @click="seedAutoCachedModels" title="Seed">
+              <template #prepend>
+                <v-icon size="small" color="error">mdi-seed</v-icon>
+              </template>
+            </v-list-item>
+          </v-list>
         </v-menu>
       </div>
     </v-col>
