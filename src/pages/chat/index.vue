@@ -145,11 +145,11 @@ watch(
 
 <template>
   <v-container
-    class="d-flex align-space-between align-center flex-column px-0 overflow-y-hidden"
+    class="d-flex align-space-between align-center flex-column px-0 overflow-y-hidden pa-12"
     height="100vh"
     max-height="100vh"
   >
-    <v-row class="pt-10 w-100 flex-0-1-100 d-flex align-center justify-center overflow-y-auto">
+    <v-row class="w-100 flex-0-1-100 d-flex align-center justify-center overflow-y-auto">
       <v-col cols="12" class="d-flex h-100" :style="{ width, maxWidth: width }">
         <!-- Welcome message -->
         <v-row class="flex-1-1-100 d-flex align-center" v-if="sentChatMessages.length === 0">
@@ -162,12 +162,18 @@ watch(
         <!-- Message history -->
         <v-row class="flex-column flex-1-1-100 flex-sm-nowrap pb-10" v-else>
           <v-slide-x-reverse-transition group>
-            <v-col cols="12" class="flex-0-0" v-for="(message, index) in sentChatMessages" :key="index">
+            <v-col
+              cols="12"
+              class="flex-0-0"
+              v-for="(message, index) in sentChatMessages"
+              :key="index"
+              :style="{ width, maxWidth: width }"
+            >
               <v-row>
                 <v-col cols="12" class="d-flex align-center justify-end">
-                  <v-card style="width: min-content" class="text-break">
+                  <v-card>
                     <v-card-text>
-                      <p class="text-truncate">{{ message }}</p>
+                      <p>{{ message }}</p>
                     </v-card-text>
                   </v-card>
                 </v-col>
