@@ -113,6 +113,19 @@ const playbackAIAnswer = async () => {
   }
 };
 
+const scrollToBottom = () => {
+  const messageHistoryContainer = document.querySelector("#messageHistoryContainer");
+  if (!messageHistoryContainer) return;
+
+  setTimeout(() => {
+    const scrollHeight = messageHistoryContainer?.scrollHeight || 0;
+    messageHistoryContainer?.scrollTo({
+      top: scrollHeight,
+      behavior: "smooth",
+    });
+  }, 0);
+};
+
 const runActionFromAIResponse = async (aiResponse: Record<string, any>) => {
   const action = getAIResponseAction(aiResponse);
   if (!action) return;
@@ -141,6 +154,20 @@ watch(
   },
   { immediate: true },
 );
+
+watch(
+  () => sentChatMessages.value.length,
+  () => {
+    nextTick(() => scrollToBottom());
+  },
+);
+
+watch(
+  () => aiResponses.value.length,
+  () => {
+    nextTick(() => scrollToBottom());
+  },
+);
 </script>
 
 <template>
@@ -149,7 +176,7 @@ watch(
     height="100vh"
     max-height="100vh"
   >
-    <v-row class="w-100 flex-0-1-100 d-flex align-center justify-center overflow-y-auto">
+    <v-row class="w-100 flex-0-1-100 d-flex align-center justify-center overflow-y-auto" id="messageHistoryContainer">
       <v-col cols="12" class="d-flex h-100" :style="{ width, maxWidth: width }">
         <!-- Welcome message -->
         <v-row class="flex-1-1-100 d-flex align-center" v-if="sentChatMessages.length === 0">
