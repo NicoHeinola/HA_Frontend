@@ -9,7 +9,7 @@ const themeStore = useThemeStore();
 const availableThemes = computed(() => Object.keys(theme.themes.value));
 
 const changeTheme = (themeName: string) => {
-  themeStore.setTheme(themeName);
+  themeStore.currentTheme = themeName;
 };
 </script>
 

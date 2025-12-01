@@ -10,7 +10,7 @@ export enum TextToActionSettingKey {
   SystemPrompt = "system_prompt",
   PredictionTimeout = "prediction_timeout",
   DefaultModel = "default_model",
-  AutoCacheModels = "auto_cache_models",
+  AutoCachedModels = "auto_cached_models",
 }
 
 export default interface TextToActionSetting {

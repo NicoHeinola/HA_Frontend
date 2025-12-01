@@ -16,6 +16,7 @@ declare module 'vue' {
     ConfirmDialog: typeof import('./components/use-dialog/confirm/ConfirmDialog.vue')['default']
     DialogProvider: typeof import('./components/use-dialog/DialogProvider.vue')['default']
     InfoText: typeof import('./components/info-text/InfoText.vue')['default']
+    ModelList: typeof import('./components/model-list/ModelList.vue')['default']
     NavigationBar: typeof import('./components/navigation/NavigationBar.vue')['default']
     PromptDialog: typeof import('./components/use-dialog/prompt/PromptDialog.vue')['default']
     RouterLink: typeof import('vue-router')['RouterLink']
@@ -30,5 +31,6 @@ declare module 'vue' {
     TooltipH2: typeof import('./components/info-text/InfoText.vue')['default']
     TooltipHeader: typeof import('./components/tooltip-header/TooltipHeader.vue')['default']
     TtaCachedModelsTable: typeof import('./components/text-to-action/tta-cached-models-table/TtaCachedModelsTable.vue')['default']
+    TtaModelList: typeof import('./components/model-list/TtaModelList.vue')['default']
   }
 }

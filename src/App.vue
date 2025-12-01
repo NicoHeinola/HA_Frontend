@@ -13,7 +13,7 @@ const theme = useTheme();
 watch(
   () => themeStore.currentTheme,
   (newTheme) => {
-    theme.global.name.value = newTheme;
+    theme.change(newTheme);
   },
   { immediate: true },
 );
