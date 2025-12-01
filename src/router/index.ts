@@ -19,6 +19,10 @@ const router = createRouter({
       redirect: "/chat",
     },
     ...setupLayouts(routes),
+    {
+      path: "/:pathMatch(.*)*",
+      redirect: "/not-found",
+    },
   ],
 });
 

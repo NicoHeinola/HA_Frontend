@@ -10,6 +10,12 @@ const links = ref([
     route: "/chat",
   },
   {
+    text: "Logs",
+    icon: "mdi-file-document-outline",
+    route: "/logs",
+    bottom: true,
+  },
+  {
     text: "TTA Settings",
     icon: "mdi-cog",
     route: "/settings/tta",

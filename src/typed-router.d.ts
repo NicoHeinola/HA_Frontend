@@ -19,6 +19,7 @@ declare module 'vue-router/auto-routes' {
    */
   export interface RouteNamedMap {
     '/chat/': RouteRecordInfo<'/chat/', '/chat', Record<never, never>, Record<never, never>>,
+    '/not-found/': RouteRecordInfo<'/not-found/', '/not-found', Record<never, never>, Record<never, never>>,
     '/settings/tta/': RouteRecordInfo<'/settings/tta/', '/settings/tta', Record<never, never>, Record<never, never>>,
     '/settings/tta/tabs/Actions': RouteRecordInfo<'/settings/tta/tabs/Actions', '/settings/tta/tabs/Actions', Record<never, never>, Record<never, never>>,
     '/settings/tta/tabs/CachedModels': RouteRecordInfo<'/settings/tta/tabs/CachedModels', '/settings/tta/tabs/CachedModels', Record<never, never>, Record<never, never>>,
@@ -39,6 +40,10 @@ declare module 'vue-router/auto-routes' {
   export interface _RouteFileInfoMap {
     'src/pages/chat/index.vue': {
       routes: '/chat/'
+      views: never
+    }
+    'src/pages/not-found/index.vue': {
+      routes: '/not-found/'
       views: never
     }
     'src/pages/settings/tta/index.vue': {
