@@ -207,7 +207,12 @@ const deleteCachedModels = async () => {
         </v-menu>
         <v-menu>
           <template #activator="{ props }">
-            <v-btn append-icon="mdi-chevron-down" v-bind="props" :loading="isLoadingAutoCachedModels" variant="outlined">
+            <v-btn
+              append-icon="mdi-chevron-down"
+              v-bind="props"
+              :loading="isLoadingAutoCachedModels"
+              variant="outlined"
+            >
               Actions
             </v-btn>
           </template>
